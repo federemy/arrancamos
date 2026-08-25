@@ -1,1 +1,1 @@
-Subí esta carpeta directamente a Netlify.
+Arrancamos v9. Se eliminó ImgBurn.
