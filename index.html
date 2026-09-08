@@ -1,117 +1,1892 @@
 <!doctype html>
 <html lang="es">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#07111f">
-<title>Arrancamos</title>
-<style>
-:root{--bg:#050914;--panel:#0b1628;--line:rgba(121,210,255,.16);--text:#eef7ff;--muted:#94a9bd;--cyan:#43d9ff;--violet:#9878ff;--green:#65efb1;--warn:#ffd47e;--shadow:0 20px 60px rgba(0,0,0,.35)}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100vh;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--text);background:radial-gradient(circle at 14% 8%,rgba(67,217,255,.14),transparent 26rem),radial-gradient(circle at 88% 4%,rgba(152,120,255,.13),transparent 28rem),linear-gradient(180deg,#060b16,#040812)}
-body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.2;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:34px 34px;mask-image:linear-gradient(to bottom,#000,transparent 80%)}
-.wrap{width:min(1380px,calc(100% - 32px));margin:auto}header{padding:42px 0 18px}h1{font-size:clamp(2.15rem,5vw,4rem);margin:0 0 16px;letter-spacing:-.045em}.stats{display:flex;gap:10px;flex-wrap:wrap}.stat{padding:8px 12px;border:1px solid var(--line);border-radius:11px;background:rgba(255,255,255,.025);color:var(--muted);font-size:.88rem}.stat strong{color:var(--text)}
-.tabs{display:inline-flex;gap:6px;padding:5px;margin:10px 0 16px;border:1px solid var(--line);border-radius:14px;background:rgba(5,9,20,.76)}.tab{border:0;background:transparent;color:var(--muted);padding:10px 15px;border-radius:10px;font-weight:800;cursor:pointer}.tab.active{color:#041019;background:linear-gradient(90deg,var(--cyan),#8ee8ff)}.tab-panel{display:none}.tab-panel.active{display:block}
-.toolbar{position:sticky;top:10px;z-index:20;display:grid;grid-template-columns:1fr auto auto;gap:9px;padding:9px;margin:0 0 18px;border:1px solid var(--line);border-radius:16px;background:rgba(5,9,20,.88);backdrop-filter:blur(18px);box-shadow:var(--shadow)}.search{width:100%;border:1px solid transparent;border-radius:11px;padding:13px 15px;background:#0a1424;color:var(--text);outline:none}.search:focus{border-color:rgba(67,217,255,.55)}.toolbtn{min-height:44px;padding:0 14px;border-radius:11px;border:1px solid var(--line);background:#0a1424;color:var(--muted);cursor:pointer;font-weight:800}.catbtn{min-width:180px;color:var(--text);border-color:rgba(67,217,255,.3);background:linear-gradient(135deg,rgba(67,217,255,.12),rgba(152,120,255,.1))}
-.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding-bottom:55px}.card{position:relative;min-height:190px;padding:15px;display:flex;flex-direction:column;border:1px solid var(--line);border-radius:17px;background:linear-gradient(145deg,rgba(15,29,50,.9),rgba(8,17,31,.86));transition:.2s;overflow:hidden}.card:hover{transform:translateY(-3px);border-color:rgba(67,217,255,.4)}.card.selected{border-color:rgba(101,239,177,.55)}.top{display:flex;justify-content:space-between;align-items:start;gap:10px}.icon{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(145deg,rgba(67,217,255,.18),rgba(152,120,255,.14));border:1px solid rgba(255,255,255,.1);font-weight:900;color:#c9f6ff}.select{width:32px;height:32px;border-radius:9px;border:1px solid rgba(67,217,255,.25);background:rgba(5,13,24,.9);color:var(--cyan);cursor:pointer;font-weight:900}.card.selected .select{background:var(--green);color:#041019;border-color:transparent}.card h2{font-size:1rem;margin:12px 0 6px}.status{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px}.label{font-size:.59rem;line-height:1;padding:4px 6px;border-radius:999px;color:#b8c9d8;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.035)}.label.good{color:var(--green);border-color:rgba(101,239,177,.18)}.label.warn{color:var(--warn);border-color:rgba(255,212,126,.18)}.card p{margin:0 0 13px;color:var(--muted);font-size:.82rem;line-height:1.43}.meta{margin-top:auto;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:7px;align-items:end}.cat{font-size:.72rem;color:#7790a7}.actions{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}.download{text-decoration:none;padding:7px 9px;border-radius:9px;background:rgba(67,217,255,.1);color:var(--cyan);border:1px solid rgba(67,217,255,.18);font-weight:800;font-size:.74rem}.download.portable{color:#cdbfff;border-color:rgba(152,120,255,.3);background:rgba(152,120,255,.1)}
-.selection{position:sticky;bottom:12px;z-index:25;display:none;align-items:center;justify-content:space-between;gap:15px;padding:13px 15px;margin-bottom:20px;border:1px solid rgba(67,217,255,.28);border-radius:15px;background:rgba(5,9,20,.95);backdrop-filter:blur(18px);box-shadow:var(--shadow)}.selection.visible{display:flex}.small{font-size:.8rem;color:var(--muted);display:block;margin-top:2px}.btns{display:flex;gap:7px;flex-wrap:wrap}.btn{min-height:39px;padding:0 12px;border-radius:10px;border:1px solid var(--line);background:#0a1424;color:var(--muted);cursor:pointer;font-weight:800}.primary{color:#041019;border-color:transparent;background:linear-gradient(90deg,var(--cyan),#8ee8ff)}
-.panel{padding:19px;margin:0 0 24px;border:1px solid var(--line);border-radius:17px;background:rgba(9,18,33,.92)}pre{overflow:auto;padding:14px;border-radius:13px;border:1px solid rgba(67,217,255,.14);background:#050b14;color:#c9f6ff;white-space:pre-wrap;word-break:break-word}
-.commands-head{margin:8px 0 18px}.commands-head h2{margin:0 0 6px}.commands-head p{color:var(--muted);margin:0}.subtabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 16px}.subtab{padding:8px 11px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.025);color:var(--muted);cursor:pointer}.subtab.active{color:#041019;background:linear-gradient(90deg,var(--cyan),#8ee8ff)}.commands-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:42px}.command-card,.help-card{padding:17px;border-radius:17px;border:1px solid var(--line);background:linear-gradient(145deg,rgba(15,29,50,.9),rgba(8,17,31,.86))}.command-card h3,.help-card h3{margin:0 0 7px;font-size:1rem}.command-card p{margin:0 0 10px;color:var(--muted);font-size:.86rem;line-height:1.45}.help-card pre{margin:10px 0 0;color:#d9e7f2}.copy{min-height:36px;padding:0 11px;border-radius:9px;border:1px solid var(--line);background:#0a1424;color:var(--muted);cursor:pointer;font-weight:800}
-.modal{position:fixed;inset:0;z-index:100;display:none}.modal.open{display:block}.backdrop{position:absolute;inset:0;background:rgba(1,5,12,.72);backdrop-filter:blur(8px)}.modalbox{position:relative;z-index:1;width:min(650px,calc(100% - 28px));max-height:calc(100vh - 48px);overflow:auto;margin:24px auto;padding:20px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(145deg,rgba(15,29,50,.99),rgba(7,15,28,.99));box-shadow:var(--shadow)}.modalhead{display:flex;justify-content:space-between;align-items:start;gap:16px;margin-bottom:15px}.modalhead h2{margin:0}.close{width:38px;height:38px;border-radius:11px;border:1px solid var(--line);background:#0a1424;color:var(--text);font-size:1.35rem;cursor:pointer}.cats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.filter{padding:11px 12px;border:1px solid var(--line);border-radius:11px;background:rgba(255,255,255,.025);color:var(--muted);cursor:pointer;text-align:left}.filter.active{color:#041019;background:linear-gradient(90deg,var(--cyan),#8ee8ff);border-color:transparent;font-weight:800}
-.notice{margin:0 0 50px;padding:16px;border:1px solid rgba(255,203,93,.18);border-radius:16px;color:#d5cba9;background:rgba(255,203,93,.05);font-size:.88rem;line-height:1.5}footer{border-top:1px solid var(--line);padding:24px 0;color:var(--muted);font-size:.85rem}
-@media(max-width:1100px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:800px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.commands-grid{grid-template-columns:1fr}}@media(max-width:620px){.wrap{width:min(100% - 22px,1380px)}.toolbar{grid-template-columns:1fr 1fr}.search{grid-column:1/-1}.catbtn{min-width:0}.grid{grid-template-columns:1fr}.selection{align-items:stretch;flex-direction:column}.cats{grid-template-columns:1fr}}
-</style>
-</head>
-<body>
-<header class="wrap">
-<h1>Arrancamos.</h1>
-<div class="stats"><div class="stat"><strong id="count">55</strong> herramientas</div><div class="stat"><strong id="catCount"></strong> categorías</div></div>
-</header>
-<main class="wrap">
-<div class="tabs">
-<button class="tab active" data-tab="programs">Programas</button>
-<button class="tab" data-tab="commands">Comandos y ayudas</button>
-</div>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#07111f" />
+    <title>Arrancamos</title>
+    <style>
+      :root {
+        --bg: #050914;
+        --panel: #0b1628;
+        --line: rgba(121, 210, 255, 0.16);
+        --text: #eef7ff;
+        --muted: #94a9bd;
+        --cyan: #43d9ff;
+        --violet: #9878ff;
+        --green: #65efb1;
+        --warn: #ffd47e;
+        --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family:
+          Inter,
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          "Segoe UI",
+          sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(
+            circle at 14% 8%,
+            rgba(67, 217, 255, 0.14),
+            transparent 26rem
+          ),
+          radial-gradient(
+            circle at 88% 4%,
+            rgba(152, 120, 255, 0.13),
+            transparent 28rem
+          ),
+          linear-gradient(180deg, #060b16, #040812);
+      }
+      body:before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0.2;
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+          linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.025) 1px,
+            transparent 1px
+          );
+        background-size: 34px 34px;
+        mask-image: linear-gradient(to bottom, #000, transparent 80%);
+      }
+      .wrap {
+        width: min(1380px, calc(100% - 32px));
+        margin: auto;
+      }
+      header {
+        padding: 42px 0 18px;
+      }
+      h1 {
+        font-size: clamp(2.15rem, 5vw, 4rem);
+        margin: 0 0 16px;
+        letter-spacing: -0.045em;
+      }
+      .stats {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .stat {
+        padding: 8px 12px;
+        border: 1px solid var(--line);
+        border-radius: 11px;
+        background: rgba(255, 255, 255, 0.025);
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+      .stat strong {
+        color: var(--text);
+      }
+      .tabs {
+        display: inline-flex;
+        gap: 6px;
+        padding: 5px;
+        margin: 10px 0 16px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: rgba(5, 9, 20, 0.76);
+      }
+      .tab {
+        border: 0;
+        background: transparent;
+        color: var(--muted);
+        padding: 10px 15px;
+        border-radius: 10px;
+        font-weight: 800;
+        cursor: pointer;
+      }
+      .tab.active {
+        color: #041019;
+        background: linear-gradient(90deg, var(--cyan), #8ee8ff);
+      }
+      .tab-panel {
+        display: none;
+      }
+      .tab-panel.active {
+        display: block;
+      }
+      .toolbar {
+        position: sticky;
+        top: 10px;
+        z-index: 20;
+        display: grid;
+        grid-template-columns: 1fr auto auto;
+        gap: 9px;
+        padding: 9px;
+        margin: 0 0 18px;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: rgba(5, 9, 20, 0.88);
+        backdrop-filter: blur(18px);
+        box-shadow: var(--shadow);
+      }
+      .search {
+        width: 100%;
+        border: 1px solid transparent;
+        border-radius: 11px;
+        padding: 13px 15px;
+        background: #0a1424;
+        color: var(--text);
+        outline: none;
+      }
+      .search:focus {
+        border-color: rgba(67, 217, 255, 0.55);
+      }
+      .toolbtn {
+        min-height: 44px;
+        padding: 0 14px;
+        border-radius: 11px;
+        border: 1px solid var(--line);
+        background: #0a1424;
+        color: var(--muted);
+        cursor: pointer;
+        font-weight: 800;
+      }
+      .catbtn {
+        min-width: 180px;
+        color: var(--text);
+        border-color: rgba(67, 217, 255, 0.3);
+        background: linear-gradient(
+          135deg,
+          rgba(67, 217, 255, 0.12),
+          rgba(152, 120, 255, 0.1)
+        );
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+        padding-bottom: 55px;
+      }
+      .card {
+        position: relative;
+        min-height: 190px;
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        border: 1px solid var(--line);
+        border-radius: 17px;
+        background: linear-gradient(
+          145deg,
+          rgba(15, 29, 50, 0.9),
+          rgba(8, 17, 31, 0.86)
+        );
+        transition: 0.2s;
+        overflow: hidden;
+      }
+      .card:hover {
+        transform: translateY(-3px);
+        border-color: rgba(67, 217, 255, 0.4);
+      }
+      .card.selected {
+        border-color: rgba(101, 239, 177, 0.55);
+      }
+      .top {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        gap: 10px;
+      }
+      .icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(
+          145deg,
+          rgba(67, 217, 255, 0.18),
+          rgba(152, 120, 255, 0.14)
+        );
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        font-weight: 900;
+        color: #c9f6ff;
+      }
+      .select {
+        width: 32px;
+        height: 32px;
+        border-radius: 9px;
+        border: 1px solid rgba(67, 217, 255, 0.25);
+        background: rgba(5, 13, 24, 0.9);
+        color: var(--cyan);
+        cursor: pointer;
+        font-weight: 900;
+      }
+      .card.selected .select {
+        background: var(--green);
+        color: #041019;
+        border-color: transparent;
+      }
+      .card h2 {
+        font-size: 1rem;
+        margin: 12px 0 6px;
+      }
+      .status {
+        display: flex;
+        gap: 4px;
+        flex-wrap: wrap;
+        margin-bottom: 8px;
+      }
+      .label {
+        font-size: 0.59rem;
+        line-height: 1;
+        padding: 4px 6px;
+        border-radius: 999px;
+        color: #b8c9d8;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.035);
+      }
+      .label.good {
+        color: var(--green);
+        border-color: rgba(101, 239, 177, 0.18);
+      }
+      .label.warn {
+        color: var(--warn);
+        border-color: rgba(255, 212, 126, 0.18);
+      }
+      .card p {
+        margin: 0 0 13px;
+        color: var(--muted);
+        font-size: 0.82rem;
+        line-height: 1.43;
+      }
+      .meta {
+        margin-top: auto;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 7px;
+        align-items: end;
+      }
+      .cat {
+        font-size: 0.72rem;
+        color: #7790a7;
+      }
+      .actions {
+        display: flex;
+        gap: 5px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+      .download {
+        text-decoration: none;
+        padding: 7px 9px;
+        border-radius: 9px;
+        background: rgba(67, 217, 255, 0.1);
+        color: var(--cyan);
+        border: 1px solid rgba(67, 217, 255, 0.18);
+        font-weight: 800;
+        font-size: 0.74rem;
+      }
+      .download.portable {
+        color: #cdbfff;
+        border-color: rgba(152, 120, 255, 0.3);
+        background: rgba(152, 120, 255, 0.1);
+      }
+      .selection {
+        position: sticky;
+        bottom: 12px;
+        z-index: 25;
+        display: none;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        padding: 13px 15px;
+        margin-bottom: 20px;
+        border: 1px solid rgba(67, 217, 255, 0.28);
+        border-radius: 15px;
+        background: rgba(5, 9, 20, 0.95);
+        backdrop-filter: blur(18px);
+        box-shadow: var(--shadow);
+      }
+      .selection.visible {
+        display: flex;
+      }
+      .small {
+        font-size: 0.8rem;
+        color: var(--muted);
+        display: block;
+        margin-top: 2px;
+      }
+      .btns {
+        display: flex;
+        gap: 7px;
+        flex-wrap: wrap;
+      }
+      .btn {
+        min-height: 39px;
+        padding: 0 12px;
+        border-radius: 10px;
+        border: 1px solid var(--line);
+        background: #0a1424;
+        color: var(--muted);
+        cursor: pointer;
+        font-weight: 800;
+      }
+      .primary {
+        color: #041019;
+        border-color: transparent;
+        background: linear-gradient(90deg, var(--cyan), #8ee8ff);
+      }
+      .panel {
+        padding: 19px;
+        margin: 0 0 24px;
+        border: 1px solid var(--line);
+        border-radius: 17px;
+        background: rgba(9, 18, 33, 0.92);
+      }
+      pre {
+        overflow: auto;
+        padding: 14px;
+        border-radius: 13px;
+        border: 1px solid rgba(67, 217, 255, 0.14);
+        background: #050b14;
+        color: #c9f6ff;
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+      .commands-head {
+        margin: 8px 0 18px;
+      }
+      .commands-head h2 {
+        margin: 0 0 6px;
+      }
+      .commands-head p {
+        color: var(--muted);
+        margin: 0;
+      }
+      .subtabs {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin: 0 0 16px;
+      }
+      .subtab {
+        padding: 8px 11px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.025);
+        color: var(--muted);
+        cursor: pointer;
+      }
+      .subtab.active {
+        color: #041019;
+        background: linear-gradient(90deg, var(--cyan), #8ee8ff);
+      }
+      .commands-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        margin-bottom: 42px;
+      }
+      .command-card,
+      .help-card {
+        padding: 17px;
+        border-radius: 17px;
+        border: 1px solid var(--line);
+        background: linear-gradient(
+          145deg,
+          rgba(15, 29, 50, 0.9),
+          rgba(8, 17, 31, 0.86)
+        );
+      }
+      .command-card h3,
+      .help-card h3 {
+        margin: 0 0 7px;
+        font-size: 1rem;
+      }
+      .command-card p {
+        margin: 0 0 10px;
+        color: var(--muted);
+        font-size: 0.86rem;
+        line-height: 1.45;
+      }
+      .help-card pre {
+        margin: 10px 0 0;
+        color: #d9e7f2;
+      }
+      .copy {
+        min-height: 36px;
+        padding: 0 11px;
+        border-radius: 9px;
+        border: 1px solid var(--line);
+        background: #0a1424;
+        color: var(--muted);
+        cursor: pointer;
+        font-weight: 800;
+      }
+      .modal {
+        position: fixed;
+        inset: 0;
+        z-index: 100;
+        display: none;
+      }
+      .modal.open {
+        display: block;
+      }
+      .backdrop {
+        position: absolute;
+        inset: 0;
+        background: rgba(1, 5, 12, 0.72);
+        backdrop-filter: blur(8px);
+      }
+      .modalbox {
+        position: relative;
+        z-index: 1;
+        width: min(650px, calc(100% - 28px));
+        max-height: calc(100vh - 48px);
+        overflow: auto;
+        margin: 24px auto;
+        padding: 20px;
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        background: linear-gradient(
+          145deg,
+          rgba(15, 29, 50, 0.99),
+          rgba(7, 15, 28, 0.99)
+        );
+        box-shadow: var(--shadow);
+      }
+      .modalhead {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        gap: 16px;
+        margin-bottom: 15px;
+      }
+      .modalhead h2 {
+        margin: 0;
+      }
+      .close {
+        width: 38px;
+        height: 38px;
+        border-radius: 11px;
+        border: 1px solid var(--line);
+        background: #0a1424;
+        color: var(--text);
+        font-size: 1.35rem;
+        cursor: pointer;
+      }
+      .cats {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 9px;
+      }
+      .filter {
+        padding: 11px 12px;
+        border: 1px solid var(--line);
+        border-radius: 11px;
+        background: rgba(255, 255, 255, 0.025);
+        color: var(--muted);
+        cursor: pointer;
+        text-align: left;
+      }
+      .filter.active {
+        color: #041019;
+        background: linear-gradient(90deg, var(--cyan), #8ee8ff);
+        border-color: transparent;
+        font-weight: 800;
+      }
+      .notice {
+        margin: 0 0 50px;
+        padding: 16px;
+        border: 1px solid rgba(255, 203, 93, 0.18);
+        border-radius: 16px;
+        color: #d5cba9;
+        background: rgba(255, 203, 93, 0.05);
+        font-size: 0.88rem;
+        line-height: 1.5;
+      }
+      footer {
+        border-top: 1px solid var(--line);
+        padding: 24px 0;
+        color: var(--muted);
+        font-size: 0.85rem;
+      }
+      @media (max-width: 1100px) {
+        .grid {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+      }
+      @media (max-width: 800px) {
+        .grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .commands-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media (max-width: 620px) {
+        .wrap {
+          width: min(100% - 22px, 1380px);
+        }
+        .toolbar {
+          grid-template-columns: 1fr 1fr;
+        }
+        .search {
+          grid-column: 1/-1;
+        }
+        .catbtn {
+          min-width: 0;
+        }
+        .grid {
+          grid-template-columns: 1fr;
+        }
+        .selection {
+          align-items: stretch;
+          flex-direction: column;
+        }
+        .cats {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="wrap">
+      <h1>Arrancamos.</h1>
+      <div class="stats">
+        <div class="stat"><strong id="count">55</strong> herramientas</div>
+        <div class="stat"><strong id="catCount"></strong> categorías</div>
+      </div>
+    </header>
+    <main class="wrap">
+      <div class="tabs">
+        <button class="tab active" data-tab="programs">Programas</button>
+        <button class="tab" data-tab="commands">Comandos y ayudas</button>
+      </div>
 
-<section id="programsTab" class="tab-panel active">
-<div class="toolbar">
-<input id="search" class="search" placeholder="Buscar programas o funciones...">
-<button id="categoryButton" class="toolbtn catbtn">Todas las categorías</button>
-<button id="clear" class="toolbtn">Limpiar</button>
-</div>
-<section id="grid" class="grid"></section>
-<div id="selectionBar" class="selection">
-<div><strong><span id="selectionCount">0</span> seleccionados</strong><span class="small">Generá un comando WinGet con lo elegido.</span></div>
-<div class="btns"><button id="clearSelection" class="btn">Vaciar</button><button id="showWinget" class="btn primary">Generar WinGet</button></div>
-</div>
-<div id="wingetPanel" class="panel" hidden>
-<h2>Comando WinGet</h2>
-<p class="small">Solo incluye los programas seleccionados que tienen identificador WinGet.</p>
-<pre><code id="wingetCode"></code></pre>
-<div class="btns"><button id="copyWinget" class="btn primary">Copiar</button><button id="downloadBat" class="btn">Descargar .bat</button></div>
-</div>
-</section>
+      <section id="programsTab" class="tab-panel active">
+        <div class="toolbar">
+          <input
+            id="search"
+            class="search"
+            placeholder="Buscar programas o funciones..."
+          />
+          <button id="categoryButton" class="toolbtn catbtn">
+            Todas las categorías
+          </button>
+          <button id="clear" class="toolbtn">Limpiar</button>
+        </div>
+        <section id="grid" class="grid"></section>
+        <div id="selectionBar" class="selection">
+          <div>
+            <strong><span id="selectionCount">0</span> seleccionados</strong
+            ><span class="small">Generá un comando WinGet con lo elegido.</span>
+          </div>
+          <div class="btns">
+            <button id="clearSelection" class="btn">Vaciar</button
+            ><button id="showWinget" class="btn primary">Generar WinGet</button>
+          </div>
+        </div>
+        <div id="wingetPanel" class="panel" hidden>
+          <h2>Comando WinGet</h2>
+          <p class="small">
+            Solo incluye los programas seleccionados que tienen identificador
+            WinGet.
+          </p>
+          <pre><code id="wingetCode"></code></pre>
+          <div class="btns">
+            <button id="copyWinget" class="btn primary">Copiar</button
+            ><button id="downloadBat" class="btn">Descargar .bat</button>
+          </div>
+        </div>
+      </section>
 
-<section id="commandsTab" class="tab-panel">
-<div class="commands-head"><h2>Comandos y ayudas</h2><p>Comandos útiles y las notas que venís guardando para mantenimiento/configuración.</p></div>
-<div class="subtabs"><button class="subtab active" data-sub="cmd">PowerShell / CMD</button><button class="subtab" data-sub="help">Ayudas / tweaks</button></div>
-<div id="commandsGrid" class="commands-grid"></div>
-<div id="helpGrid" class="commands-grid" style="display:none"></div>
-</section>
+      <section id="commandsTab" class="tab-panel">
+        <div class="commands-head">
+          <h2>Comandos y ayudas</h2>
+          <p>
+            Comandos útiles y las notas que venís guardando para
+            mantenimiento/configuración.
+          </p>
+        </div>
+        <div class="subtabs">
+          <button class="subtab active" data-sub="cmd">PowerShell / CMD</button
+          ><button class="subtab" data-sub="help">Ayudas / tweaks</button>
+        </div>
+        <div id="commandsGrid" class="commands-grid"></div>
+        <div id="helpGrid" class="commands-grid" style="display: none"></div>
+      </section>
 
-<div class="notice"><strong>Importante:</strong> descargá desde el sitio indicado y revisá qué hace cada herramienta o ajuste antes de aplicarlo.</div>
-</main>
-<footer><div class="wrap">Arrancamos · Programas, comandos y mantenimiento de Windows.</div></footer>
+      <div class="notice">
+        <strong>Importante:</strong> descargá desde el sitio indicado y revisá
+        qué hace cada herramienta o ajuste antes de aplicarlo.
+      </div>
+    </main>
+    <footer>
+      <div class="wrap">
+        Arrancamos · Programas, comandos y mantenimiento de Windows.
+      </div>
+    </footer>
 
-<div id="categoryModal" class="modal" aria-hidden="true">
-<div class="backdrop" data-close></div>
-<div class="modalbox"><div class="modalhead"><h2>Categorías</h2><button class="close" data-close>×</button></div><div id="filters" class="cats"></div></div>
-</div>
+    <div id="categoryModal" class="modal" aria-hidden="true">
+      <div class="backdrop" data-close></div>
+      <div class="modalbox">
+        <div class="modalhead">
+          <h2>Categorías</h2>
+          <button class="close" data-close>×</button>
+        </div>
+        <div id="filters" class="cats"></div>
+      </div>
+    </div>
 
-<script>
-const apps=[{"name": "Google Chrome", "cat": "Navegadores", "desc": "Navegador popular con sincronización de cuenta Google.", "url": "https://www.google.com/chrome/", "tag": "Recomendado", "initial": "CH", "winget": "Google.Chrome", "portableUrl": "https://portableapps.com/apps/internet/google_chrome_portable"}, {"name": "Mozilla Firefox", "cat": "Navegadores", "desc": "Navegador abierto, flexible y orientado a la privacidad.", "url": "https://www.mozilla.org/firefox/new/", "tag": "Alternativa", "initial": "FF", "winget": "Mozilla.Firefox", "portableUrl": "https://portableapps.com/apps/internet/firefox_portable"}, {"name": "Brave", "cat": "Navegadores", "desc": "Navegador con bloqueo de anuncios y rastreadores integrado.", "url": "https://brave.com/download/", "tag": "Privacidad", "initial": "BR", "winget": "Brave.Brave", "portableUrl": null}, {"name": "7-Zip", "cat": "Compresión", "desc": "Compresor gratuito, liviano y compatible con muchos formatos.", "url": "https://www.7-zip.org/download.html", "tag": "Imprescindible", "initial": "7Z", "winget": "7zip.7zip", "portableUrl": "https://portableapps.com/apps/utilities/7-zip_portable"}, {"name": "WinRAR", "cat": "Compresión", "desc": "Herramienta clásica para archivos RAR, ZIP y otros formatos.", "url": "https://www.win-rar.com/download.html", "tag": "Popular", "initial": "WR", "winget": "RARLab.WinRAR", "portableUrl": null}, {"name": "VLC Media Player", "cat": "Multimedia", "desc": "Reproductor de audio y video compatible con casi cualquier formato.", "url": "https://www.videolan.org/vlc/", "tag": "Imprescindible", "initial": "VL", "winget": "VideoLAN.VLC", "portableUrl": "https://portableapps.com/apps/music_video/vlc_portable"}, {"name": "Adobe Acrobat Reader", "cat": "Documentos y PDF", "desc": "Lector de PDF, formularios, comentarios y firmas.", "url": "https://get.adobe.com/reader/", "tag": "Completo", "initial": "AR", "winget": "Adobe.Acrobat.Reader.64-bit", "portableUrl": null}, {"name": "Notepad++", "cat": "Edición y capturas", "desc": "Editor de texto rápido para archivos, código y configuraciones.", "url": "https://notepad-plus-plus.org/downloads/", "tag": "Liviano", "initial": "N+", "winget": "Notepad++.Notepad++", "portableUrl": "https://portableapps.com/apps/development/notepadpp_portable"}, {"name": "Visual Studio Code", "cat": "Edición y capturas", "desc": "Editor moderno para programación y archivos técnicos.", "url": "https://code.visualstudio.com/Download", "tag": "Desarrollo", "initial": "VS", "winget": "Microsoft.VisualStudioCode", "portableUrl": null}, {"name": "WhatsApp", "cat": "Comunicación", "desc": "Mensajería y llamadas desde la computadora.", "url": "https://www.whatsapp.com/download", "tag": "MensajerÃ­a", "initial": "WA", "winget": "WhatsApp.WhatsApp", "portableUrl": null}, {"name": "Telegram Desktop", "cat": "Comunicación", "desc": "Mensajería, canales y transferencia de archivos.", "url": "https://desktop.telegram.org/", "tag": "MensajerÃ­a", "initial": "TG", "winget": "Telegram.TelegramDesktop", "portableUrl": null}, {"name": "Zoom", "cat": "Comunicación", "desc": "Videollamadas y reuniones virtuales.", "url": "https://zoom.us/download", "tag": "Reuniones", "initial": "ZM", "winget": "Zoom.Zoom", "portableUrl": null}, {"name": "Everything", "cat": "Utilidades de Windows", "desc": "Encuentra archivos y carpetas de forma casi instantánea.", "url": "https://www.voidtools.com/downloads/", "tag": "Imprescindible", "initial": "EV", "winget": "voidtools.Everything", "portableUrl": "https://portableapps.com/apps/utilities/everything-portable"}, {"name": "Microsoft PowerToys", "cat": "Utilidades de Windows", "desc": "Colección oficial de herramientas para mejorar Windows.", "url": "https://learn.microsoft.com/windows/powertoys/install", "tag": "Recomendado", "initial": "PT", "winget": "Microsoft.PowerToys", "portableUrl": null}, {"name": "Microsoft PC Manager", "cat": "Utilidades de Windows", "desc": "Limpieza, estado del sistema y herramientas básicas de Microsoft.", "url": "https://pcmanager.microsoft.com/", "tag": "Mantenimiento", "initial": "PM", "winget": "Microsoft.PCManager", "portableUrl": null}, {"name": "TreeSize Free", "cat": "Utilidades de Windows", "desc": "Analiza qué carpetas y archivos ocupan espacio en el disco.", "url": "https://www.jam-software.com/treesize_free", "tag": "Espacio", "initial": "TS", "winget": "JAMSoftware.TreeSize.Free", "portableUrl": null}, {"name": "CrystalDiskInfo", "cat": "Discos y hardware", "desc": "Muestra salud, temperatura y datos SMART de discos HDD y SSD.", "url": "https://crystalmark.info/en/software/crystaldiskinfo/", "tag": "DiagnÃ³stico", "initial": "CI", "winget": "CrystalDewWorld.CrystalDiskInfo", "portableUrl": "https://portableapps.com/apps/utilities/crystaldiskinfo_portable"}, {"name": "CrystalDiskMark", "cat": "Discos y hardware", "desc": "Mide la velocidad de lectura y escritura de tus discos.", "url": "https://crystalmark.info/en/software/crystaldiskmark/", "tag": "Rendimiento", "initial": "CM", "winget": "CrystalDewWorld.CrystalDiskMark", "portableUrl": "https://portableapps.com/apps/utilities/crystaldiskmark_portable"}, {"name": "HWiNFO", "cat": "Discos y hardware", "desc": "Información detallada, sensores y temperaturas del equipo.", "url": "https://www.hwinfo.com/download/", "tag": "Completo", "initial": "HW", "winget": "REALiX.HWiNFO", "portableUrl": "https://portableapps.com/apps/utilities/hwinfo-portable"}, {"name": "CPU-Z", "cat": "Discos y hardware", "desc": "Información del procesador, memoria y placa madre.", "url": "https://www.cpuid.com/softwares/cpu-z.html", "tag": "Hardware", "initial": "CZ", "winget": "CPUID.CPU-Z", "portableUrl": "https://portableapps.com/apps/utilities/cpu-z-portable"}, {"name": "GPU-Z", "cat": "Discos y hardware", "desc": "Información detallada de la placa de video.", "url": "https://www.techpowerup.com/gpuz/", "tag": "GrÃ¡ficos", "initial": "GZ", "winget": "TechPowerUp.GPU-Z", "portableUrl": null}, {"name": "Autoruns", "cat": "Procesos e inicio", "desc": "Muestra todo lo que se ejecuta al iniciar Windows.", "url": "https://learn.microsoft.com/sysinternals/downloads/autoruns", "tag": "Avanzado", "initial": "AU", "winget": "Microsoft.Sysinternals.Autoruns", "portableUrl": "https://portableapps.com/apps/utilities/autoruns-portable"}, {"name": "Process Explorer", "cat": "Procesos e inicio", "desc": "Administrador de tareas avanzado de Microsoft Sysinternals.", "url": "https://learn.microsoft.com/sysinternals/downloads/process-explorer", "tag": "Avanzado", "initial": "PE", "winget": "Microsoft.Sysinternals.ProcessExplorer", "portableUrl": "https://portableapps.com/apps/utilities/process-explorer-portable"}, {"name": "Process Monitor", "cat": "Procesos e inicio", "desc": "Registra actividad de archivos, procesos y Registro de Windows.", "url": "https://learn.microsoft.com/sysinternals/downloads/procmon", "tag": "TÃ©cnico", "initial": "PR", "winget": "Microsoft.Sysinternals.ProcessMonitor", "portableUrl": null}, {"name": "Revo Uninstaller Free", "cat": "Limpieza y desinstalación", "desc": "Desinstala programas y busca restos que puedan quedar.", "url": "https://www.revouninstaller.com/products/revo-uninstaller-free/", "tag": "Recomendado", "initial": "RV", "winget": "RevoUninstaller.RevoUninstaller", "portableUrl": null}, {"name": "Bulk Crap Uninstaller", "cat": "Limpieza y desinstalación", "desc": "Elimina varios programas y detecta instalaciones difíciles.", "url": "https://www.bcuninstaller.com/", "tag": "Avanzado", "initial": "BC", "winget": "Klocman.BulkCrapUninstaller", "portableUrl": null}, {"name": "Geek Uninstaller", "cat": "Limpieza y desinstalación", "desc": "Desinstalador pequeño, rápido y portable.", "url": "https://geekuninstaller.com/download", "tag": "Portable", "initial": "GU", "winget": "GeekUninstaller.GeekUninstaller", "portableUrl": "https://portableapps.com/apps/utilities/geekuninstaller-portable"}, {"name": "BleachBit", "cat": "Limpieza y desinstalación", "desc": "Limpieza de archivos temporales y cachés.", "url": "https://www.bleachbit.org/download/windows", "tag": "Gratis", "initial": "BB", "winget": "BleachBit.BleachBit", "portableUrl": "https://portableapps.com/apps/utilities/bleachbit_portable"}, {"name": "Malwarebytes Free", "cat": "Seguridad y análisis", "desc": "Análisis manual complementario contra malware.", "url": "https://www.malwarebytes.com/mwb-download", "tag": "Segunda opiniÃ³n", "initial": "MW", "winget": "Malwarebytes.Malwarebytes", "portableUrl": null}, {"name": "AdwCleaner", "cat": "Seguridad y análisis", "desc": "Elimina adware, barras y programas potencialmente no deseados.", "url": "https://www.malwarebytes.com/adwcleaner", "tag": "Portable", "initial": "AD", "winget": "Malwarebytes.AdwCleaner", "portableUrl": null}, {"name": "ESET Online Scanner", "cat": "Seguridad y análisis", "desc": "Escaneo puntual del sistema con el motor de ESET.", "url": "https://www.eset.com/int/home/online-scanner/", "tag": "EscÃ¡ner", "initial": "ES", "winget": null, "portableUrl": null}, {"name": "Microsoft Safety Scanner", "cat": "Seguridad y análisis", "desc": "Herramienta puntual de Microsoft para buscar malware.", "url": "https://learn.microsoft.com/microsoft-365/security/intelligence/safety-scanner-download", "tag": "Microsoft", "initial": "MS", "winget": null, "portableUrl": null}, {"name": "3DP Chip", "cat": "Drivers", "desc": "Detecta componentes y ayuda a encontrar sus controladores.", "url": "https://www.3dpchip.com/3dpchip/index_eng.html", "tag": "Drivers", "initial": "3D", "winget": null, "portableUrl": null}, {"name": "Intel Driver & Support Assistant", "cat": "Drivers", "desc": "Detecta y actualiza controladores de hardware Intel.", "url": "https://www.intel.com/content/www/us/en/support/detect.html", "tag": "Intel", "initial": "IN", "winget": null, "portableUrl": null}, {"name": "NVIDIA App", "cat": "Drivers", "desc": "Controladores y configuración para placas NVIDIA.", "url": "https://www.nvidia.com/en-us/software/nvidia-app/", "tag": "NVIDIA", "initial": "NV", "winget": null, "portableUrl": null}, {"name": "AMD Software", "cat": "Drivers", "desc": "Controladores y configuración para hardware AMD Radeon.", "url": "https://www.amd.com/en/support/download/drivers.html", "tag": "AMD", "initial": "AM", "winget": null, "portableUrl": null}, {"name": "Dropbox", "cat": "Nube y respaldo", "desc": "Sincronización de archivos entre dispositivos y la nube.", "url": "https://www.dropbox.com/install", "tag": "Nube", "initial": "DB", "winget": "Dropbox.Dropbox", "portableUrl": null}, {"name": "Google Drive", "cat": "Nube y respaldo", "desc": "Acceso y sincronización de Google Drive desde Windows.", "url": "https://www.google.com/drive/download/", "tag": "Nube", "initial": "GD", "winget": "Google.GoogleDrive", "portableUrl": null}, {"name": "Speedtest by Ookla", "cat": "Internet y soporte remoto", "desc": "Mide velocidad, latencia y estabilidad básica de Internet.", "url": "https://www.speedtest.net/", "tag": "Online", "initial": "ST", "winget": null, "portableUrl": null}, {"name": "Fast.com", "cat": "Internet y soporte remoto", "desc": "Prueba de velocidad muy simple desde el navegador.", "url": "https://fast.com/", "tag": "Sin instalar", "initial": "FA", "winget": null, "portableUrl": null}, {"name": "TeamViewer QuickSupport", "cat": "Internet y soporte remoto", "desc": "Asistencia remota rápida sin instalación completa.", "url": "https://www.teamviewer.com/en/download/windows/", "tag": "Soporte", "initial": "TV", "winget": "TeamViewer.TeamViewer", "portableUrl": null}, {"name": "Asistencia rápida de Windows", "cat": "Internet y soporte remoto", "desc": "Herramienta de Microsoft para dar o recibir ayuda con un código.", "url": "https://apps.microsoft.com/detail/9wzdncrfj0dm", "tag": "Simple", "initial": "QA", "winget": null, "portableUrl": null}, {"name": "Chrome Remote Desktop", "cat": "Internet y soporte remoto", "desc": "Acceso remoto desde una página web usando una cuenta Google.", "url": "https://remotedesktop.google.com/", "tag": "Desde navegador", "initial": "CR", "winget": null, "portableUrl": null}, {"name": "RustDesk", "cat": "Internet y soporte remoto", "desc": "Alternativa de escritorio remoto abierta y multiplataforma.", "url": "https://rustdesk.com/", "tag": "Alternativa", "initial": "RD", "winget": "RustDesk.RustDesk", "portableUrl": null}, {"name": "Wintoys", "cat": "Utilidades de Windows", "desc": "Herramienta para configurar, optimizar, limpiar, reparar y ajustar Windows.", "url": "https://apps.microsoft.com/detail/9p8ltpgcbzxd", "initial": "WT", "winget": null, "portableUrl": null}, {"name": "Windows10Debloater", "cat": "Utilidades de Windows", "desc": "Script/GUI para quitar aplicaciones preinstaladas y aplicar ajustes en Windows 10.", "url": "https://github.com/Sycnex/Windows10Debloater", "initial": "WD", "winget": null, "portableUrl": null}, {"name": "Office 2016", "cat": "Documentos y PDF", "desc": "Página oficial de Microsoft para instalar o reinstalar Office 2016 con una licencia válida.", "url": "https://support.microsoft.com/en-us/office/lifecycle/officeinstall/download-and-install-or-reinstall-office-2021-office-2019-or-office-2016", "initial": "O16", "winget": null, "portableUrl": null}, {"name": "Core Temp", "cat": "Hardware y temperatura", "desc": "Monitor liviano de temperatura del procesador y de cada núcleo.", "url": "https://www.alcpu.com/CoreTemp/", "initial": "CT", "winget": "ALCPU.CoreTemp", "portableUrl": "https://www.alcpu.com/CoreTemp/"}, {"name": "Open Hardware Monitor", "cat": "Hardware y temperatura", "desc": "Monitorea temperaturas, ventiladores, voltajes, carga y frecuencias del hardware.", "url": "https://openhardwaremonitor.org/", "initial": "OH", "winget": null, "portableUrl": "https://openhardwaremonitor.org/downloads/"}, {"name": "Duplicate Cleaner", "cat": "Archivos y almacenamiento", "desc": "Busca archivos duplicados y ayuda a revisar cuáles conservar o eliminar.", "url": "https://www.duplicatecleaner.com/", "initial": "DC", "winget": null, "portableUrl": null}, {"name": "FastStone Photo Resizer", "cat": "Imágenes", "desc": "Redimensiona, convierte y renombra imágenes por lotes.", "url": "https://www.faststone.org/FSResizerDetail.htm", "initial": "FR", "winget": null, "portableUrl": "https://www.faststone.org/FSResizerDetail.htm"}, {"name": "foobar2000", "cat": "Audio y video", "desc": "Reproductor de audio liviano y muy configurable.", "url": "https://www.foobar2000.org/", "initial": "FB", "winget": "PeterPawlowski.foobar2000", "portableUrl": null}, {"name": "Rufus", "cat": "Discos y booteo", "desc": "Crea pendrives booteables e instala imágenes ISO en USB.", "url": "https://rufus.ie/", "initial": "RF", "winget": "Rufus.Rufus", "portableUrl": "https://rufus.ie/"}, {"name": "WinCDEmu", "cat": "Discos y booteo", "desc": "Monta imágenes ISO y otros formatos como unidades virtuales.", "url": "https://wincdemu.sysprogs.org/", "initial": "WC", "winget": "Sysprogs.WinCDEmu", "portableUrl": null}, {"name": "Emsisoft Emergency Kit", "cat": "Seguridad", "desc": "Escáner antimalware portable para diagnóstico y limpieza puntual.", "url": "https://www.emsisoft.com/en/home/emergency-kit/", "initial": "EK", "winget": null, "portableUrl": "https://www.emsisoft.com/en/home/emergency-kit/"}, {"name": "ClipX", "cat": "Productividad", "desc": "Historial de portapapeles simple y liviano.", "url": "https://bluemars.org/clipx/", "initial": "CX", "winget": null, "portableUrl": null}, {"name": "DimScreen", "cat": "Pantalla y accesibilidad", "desc": "Reduce rápidamente el brillo aparente de la pantalla desde Windows.", "url": "https://dimscreen.en.softonic.com/", "initial": "DS", "winget": null, "portableUrl": null}, {"name": "TinyTask", "cat": "Automatización", "desc": "Graba y reproduce acciones simples de teclado y mouse.", "url": "https://tinytask.net/", "initial": "TT", "winget": null, "portableUrl": "https://tinytask.net/"}, {"name": "CoolReader", "cat": "Documentos y lectura", "desc": "Lector liviano de ebooks y documentos en varios formatos.", "url": "https://sourceforge.net/projects/crengine/", "initial": "CR", "winget": null, "portableUrl": "https://sourceforge.net/projects/crengine/"}, {"name": "ACDSee", "cat": "Imágenes", "desc": "Visor, organizador y gestor de fotografías.", "url": "https://www.acdsee.com/", "initial": "AC", "winget": null, "portableUrl": null}, {"name": "HFS - HTTP File Server", "cat": "Red y transferencia", "desc": "Servidor HTTP simple para compartir archivos desde una PC por red.", "url": "https://github.com/rejetto/hfs", "initial": "HF", "winget": null, "portableUrl": "https://github.com/rejetto/hfs/releases"}, {"name": "3DP Net", "cat": "Drivers", "desc": "Paquete para instalar controladores de red cuando una PC quedó sin Internet.", "url": "https://www.3dpchip.com/3dpchip/3dp/net_down_en.php", "initial": "3N", "winget": null, "portableUrl": null}, {"name": "BlyxBackup", "cat": "Herramientas Blyx", "desc": "Backups y copias incrementales.", "url": "#", "initial": "BX", "winget": null, "portableUrl": null}, {"name": "BlyxDaylog", "cat": "Herramientas Blyx", "desc": "Registro diario y seguimiento.", "url": "#", "initial": "BX", "winget": null, "portableUrl": null}, {"name": "BlyxFolderRadar", "cat": "Herramientas Blyx", "desc": "Monitoreo y análisis de carpetas.", "url": "#", "initial": "BX", "winget": null, "portableUrl": null}, {"name": "BlyxInstagramDownloader", "cat": "Herramientas Blyx", "desc": "Descarga de contenido de Instagram.", "url": "#", "initial": "BX", "winget": null, "portableUrl": null}, {"name": "BlyxJPG", "cat": "Herramientas Blyx", "desc": "Herramienta de procesamiento de imágenes JPG.", "url": "#", "initial": "BX", "winget": null, "portableUrl": null}, {"name": "BlyxSentinel", "cat": "Herramientas Blyx", "desc": "Herramienta propia de monitoreo.", "url": "#", "initial": "BX", "winget": null, "portableUrl": null}, {"name": "BlyxSmartArchiver", "cat": "Herramientas Blyx", "desc": "Organización y archivado inteligente de archivos.", "url": "#", "initial": "BX", "winget": null, "portableUrl": null}, {"name": "BlyxTikTokDownloaderPortable", "cat": "Herramientas Blyx", "desc": "Descarga portable de contenido de TikTok.", "url": "#", "initial": "BX", "winget": null, "portableUrl": null}, {"name": "BlyxTikTokImagenesPortable", "cat": "Herramientas Blyx", "desc": "Descarga portable de imágenes de TikTok.", "url": "#", "initial": "BX", "winget": null, "portableUrl": null}, {"name": "BlyxVideoMini", "cat": "Herramientas Blyx", "desc": "Procesamiento y reducción de videos.", "url": "#", "initial": "BX", "winget": null, "portableUrl": null}, {"name": "BlyxVSCODownloader", "cat": "Herramientas Blyx", "desc": "Descarga/gestión relacionada con VS Code.", "url": "#", "initial": "BX", "winget": null, "portableUrl": null}, {"name": "BuscadorDuplicadas", "cat": "Herramientas Blyx", "desc": "Buscador propio de archivos duplicados.", "url": "#", "initial": "BX", "winget": null, "portableUrl": null}, {"name": "Media Optimizer", "cat": "Herramientas Blyx", "desc": "Optimización y procesamiento de archivos multimedia.", "url": "#", "initial": "BX", "winget": null, "portableUrl": null}, {"name": "Video a jpg", "cat": "Herramientas Blyx", "desc": "Extrae imágenes JPG desde videos.", "url": "#", "initial": "BX", "winget": null, "portableUrl": null}];
-const commands=[{"title": "Reparar archivos de Windows", "desc": "Busca y repara archivos protegidos del sistema.", "command": "sfc /scannow", "admin": true, "level": "Sistema"}, {"title": "Reparar imagen de Windows", "desc": "Repara la imagen del sistema usada por Windows Update y SFC.", "command": "DISM /Online /Cleanup-Image /RestoreHealth", "admin": true, "level": "Sistema"}, {"title": "Analizar componentes", "desc": "Informa el estado y tamaño del almacén de componentes.", "command": "DISM /Online /Cleanup-Image /AnalyzeComponentStore", "admin": true, "level": "Sistema"}, {"title": "Limpiar componentes antiguos", "desc": "Limpia componentes reemplazados de Windows.", "command": "DISM /Online /Cleanup-Image /StartComponentCleanup", "admin": true, "level": "Sistema"}, {"title": "Buscar errores en disco", "desc": "Analiza la unidad C sin programar una reparación completa.", "command": "chkdsk C: /scan", "admin": true, "level": "Discos"}, {"title": "Actualizar programas", "desc": "Actualiza las aplicaciones compatibles con WinGet.", "command": "winget upgrade --all", "admin": false, "level": "WinGet"}, {"title": "Ver programas instalados", "desc": "Lista los paquetes reconocidos por WinGet.", "command": "winget list", "admin": false, "level": "WinGet"}, {"title": "Exportar lista WinGet", "desc": "Guarda una lista reproducible de aplicaciones.", "command": "winget export -o \"$env:USERPROFILE\\Desktop\\programas-winget.json\" --include-versions", "admin": false, "level": "WinGet"}, {"title": "Importar lista WinGet", "desc": "Instala apps desde un archivo exportado.", "command": "winget import -i \"$env:USERPROFILE\\Desktop\\programas-winget.json\" --accept-package-agreements --accept-source-agreements", "admin": false, "level": "WinGet"}, {"title": "Limpiar DNS", "desc": "Vacía la caché DNS.", "command": "ipconfig /flushdns", "admin": true, "level": "Red"}, {"title": "Renovar IP", "desc": "Libera y solicita una nueva IP al router.", "command": "ipconfig /release\nipconfig /renew", "admin": true, "level": "Red"}, {"title": "Restablecer Winsock", "desc": "Reinicia componentes de red.", "command": "netsh winsock reset", "admin": true, "level": "Red"}, {"title": "Ver adaptadores", "desc": "Muestra adaptadores, estado, velocidad y MAC.", "command": "Get-NetAdapter | Format-Table Name, Status, LinkSpeed, MacAddress", "admin": false, "level": "Red"}, {"title": "Probar Internet", "desc": "Comprueba conectividad y latencia.", "command": "Test-Connection 1.1.1.1 -Count 4", "admin": false, "level": "Red"}, {"title": "Probar puerto 443", "desc": "Comprueba si un dominio responde por HTTPS.", "command": "Test-NetConnection google.com -Port 443", "admin": false, "level": "Red"}, {"title": "Ver programas de inicio", "desc": "Lista entradas configuradas para iniciar con Windows.", "command": "Get-CimInstance Win32_StartupCommand | Select-Object Name, Command, Location", "admin": false, "level": "Inicio"}, {"title": "Ver procesos CPU", "desc": "Muestra los procesos con más tiempo de CPU.", "command": "Get-Process | Sort-Object CPU -Descending | Select-Object -First 15 Name, CPU, Id", "admin": false, "level": "Procesos"}, {"title": "Ver procesos RAM", "desc": "Muestra los procesos que más memoria usan.", "command": "Get-Process | Sort-Object WorkingSet64 -Descending | Select-Object -First 15 Name, @{Name='RAM_MB';Expression={[math]::Round($_.WorkingSet64/1MB,1)}}, Id", "admin": false, "level": "Procesos"}, {"title": "Ver discos físicos", "desc": "Lista discos y estado de salud.", "command": "Get-PhysicalDisk | Format-Table FriendlyName, MediaType, BusType, Size, HealthStatus", "admin": false, "level": "Hardware"}, {"title": "Ver espacio disponible", "desc": "Muestra capacidad y espacio libre.", "command": "Get-Volume | Where-Object DriveLetter | Format-Table DriveLetter, FileSystemLabel, FileSystem, SizeRemaining, Size", "admin": false, "level": "Hardware"}, {"title": "Ver batería", "desc": "Muestra carga y estado de la batería.", "command": "Get-CimInstance Win32_Battery | Select-Object Name, EstimatedChargeRemaining, BatteryStatus", "admin": false, "level": "Hardware"}, {"title": "Informe de batería", "desc": "Genera un reporte HTML de batería en el Escritorio.", "command": "powercfg /batteryreport /output \"$env:USERPROFILE\\Desktop\\battery-report.html\"", "admin": false, "level": "Informe"}, {"title": "Informe de energía", "desc": "Analiza problemas de energía y suspensión.", "command": "powercfg /energy /output \"$env:USERPROFILE\\Desktop\\energy-report.html\"", "admin": true, "level": "Informe"}, {"title": "Ver drivers", "desc": "Lista controladores firmados y sus versiones.", "command": "Get-CimInstance Win32_PnPSignedDriver | Select-Object DeviceName, Manufacturer, DriverVersion, DriverDate | Sort-Object DeviceName", "admin": false, "level": "Drivers"}, {"title": "Dispositivos con errores", "desc": "Muestra dispositivos Plug and Play con problemas.", "command": "Get-PnpDevice | Where-Object Status -ne 'OK'", "admin": false, "level": "Drivers"}, {"title": "Exportar drivers", "desc": "Copia controladores de terceros al Escritorio.", "command": "Export-WindowsDriver -Online -Destination \"$env:USERPROFILE\\Desktop\\DriversBackup\"", "admin": true, "level": "Drivers"}, {"title": "Eventos críticos", "desc": "Muestra errores críticos recientes del sistema.", "command": "Get-WinEvent -FilterHashtable @{LogName='System'; Level=1,2; StartTime=(Get-Date).AddDays(-3)} | Select-Object TimeCreated, Id, ProviderName, Message", "admin": true, "level": "Diagnóstico"}, {"title": "Apagados inesperados", "desc": "Busca reinicios y apagados no planificados.", "command": "Get-WinEvent -FilterHashtable @{LogName='System'; Id=41,6008} | Select-Object -First 20 TimeCreated, Id, Message", "admin": true, "level": "Diagnóstico"}, {"title": "Vaciar Papelera", "desc": "Vacía la Papelera de reciclaje.", "command": "Clear-RecycleBin -Force", "admin": false, "level": "Limpieza"}, {"title": "Limpiar temporales", "desc": "Borra temporales del usuario que no estén en uso.", "command": "Get-ChildItem $env:TEMP -Force -ErrorAction SilentlyContinue | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue", "admin": false, "level": "Limpieza"}, {"title": "Abrir Windows Update", "desc": "Abre directamente Windows Update.", "command": "Start-Process 'ms-settings:windowsupdate'", "admin": false, "level": "Acceso"}, {"title": "Abrir programas de inicio", "desc": "Abre la configuración de apps de inicio.", "command": "Start-Process 'ms-settings:startupapps'", "admin": false, "level": "Acceso"}, {"title": "Abrir almacenamiento", "desc": "Abre la configuración de almacenamiento.", "command": "Start-Process 'ms-settings:storagesense'", "admin": false, "level": "Acceso"}, {"title": "Hash SHA256", "desc": "Calcula el hash de un archivo.", "command": "Get-FileHash \"C:\\ruta\\archivo.exe\" -Algorithm SHA256", "admin": false, "level": "Seguridad"}, {"title": "Buscar archivos grandes", "desc": "Lista los 30 archivos más grandes del perfil.", "command": "Get-ChildItem $env:USERPROFILE -File -Recurse -ErrorAction SilentlyContinue | Sort-Object Length -Descending | Select-Object -First 30 FullName, @{Name='MB';Expression={[math]::Round($_.Length/1MB,1)}}", "admin": false, "level": "Espacio"}];
-const helps=[{"title": "Cómo desactivar manualmente el inicio rápido", "body": "Ve al Panel de control y selecciona «Opciones de energía».\n\nElige «Cambiar las acciones de los botones de inicio/apagado».\n\nHaz clic en «Cambiar la configuración actualmente no disponible».\n\nEn «Configuración de apagado», desmarca la casilla «Activar inicio rápido»."}, {"title": "Sacar marca de agua Windows 11", "body": "1. Abrir CMD como administrador\n2. Copiar y pegar:\nbcdedit -set TESTSIGNING OFF\n3. Cuando salga que se completó con éxito, reiniciar computadora."}, {"title": "Chrome más rápido", "body": "Crear acceso directo a Chrome y agregar:\n\n--disable-extensions\n–process-per-site"}, {"title": "Servicios para sacar", "body": "Superfetch\nWindows Search\nWindows Update\nServicio de uso compartido de red del Reproductor de Windows Media\nDirectiva de extracción de tarjetas inteligentes\nTarjeta inteligente\nUbicador de llamada a procedimiento remoto\nParental Controls\nArchivos sin conexión\nAgente de Protección de acceso a redes\nServicio del iniciador iSCSI de Microsoft\nBranchCache\nServicio Informe de errores de Windows\nServicio Cifrado de unidad BitLocker\nFax\nServicio de entrada de Tablet PC\nServicio biométrico de Windows"}, {"title": "Deshabilitar restaurar sistema", "body": "Go to Start and open Computer.\nRight-click your SSD drive and select Properties.\nAt the bottom of the disk properties window, uncheck Allow files on this drive to have contents indexed in addition to file properties.\nClick OK to save your changes.\n\nSi hay SSD sacar la opción del disco de indexar los archivos, desde las propiedades del disco."}, {"title": "Windows tarda en abrir carpeta?", "body": "desactivar file indexing?\n\nhttps://www.tenforums.com/performance-maintenance/76052-search-indexing-taking-remarkably-long-time.html\nhttps://systembooster.minitool.com/boost-pc/windows-file-explorer-slow.html\n\ndisk cleanup -> borrar thumbnails\nfolder options customize, general items"}, {"title": "Mejorar PC", "body": "windows debloater\napps en segundo plano\npropiedades C sacar indexado, solo si es SSD\nsacar prefetch, update, search (en win lite)\nsacar visuales"}, {"title": "Office / Windows / otras notas", "body": "Office 2016 en pendrive verde y blanco\n\nHay una forma de activar Office y Windows con códigos de la página Massgrave:\nhttps://massgrave.dev/\n\nHay un Windows del grupo Phoenix creo, está en el pendrive amarillo de 2 GB.\n\nAutoruns de Windows para sacar cosas."}];
-const grid=document.querySelector('#grid'),filters=document.querySelector('#filters'),search=document.querySelector('#search');
-const categoryButton=document.querySelector('#categoryButton'),modal=document.querySelector('#categoryModal');
-const categories=['Todos',...new Set(apps.map(a=>a.cat))]; let activeCategory='Todos'; const selected=new Set();
-document.querySelector('#catCount').textContent=categories.length-1;
+    <script>
+      const apps = [
+        {
+          name: "Google Chrome",
+          cat: "Navegadores",
+          desc: "Navegador popular con sincronización de cuenta Google.",
+          url: "https://www.google.com/chrome/",
+          tag: "Recomendado",
+          initial: "CH",
+          winget: "Google.Chrome",
+          portableUrl:
+            "https://portableapps.com/apps/internet/google_chrome_portable",
+        },
+        {
+          name: "Mozilla Firefox",
+          cat: "Navegadores",
+          desc: "Navegador abierto, flexible y orientado a la privacidad.",
+          url: "https://www.mozilla.org/firefox/new/",
+          tag: "Alternativa",
+          initial: "FF",
+          winget: "Mozilla.Firefox",
+          portableUrl:
+            "https://portableapps.com/apps/internet/firefox_portable",
+        },
+        {
+          name: "Brave",
+          cat: "Navegadores",
+          desc: "Navegador con bloqueo de anuncios y rastreadores integrado.",
+          url: "https://brave.com/download/",
+          tag: "Privacidad",
+          initial: "BR",
+          winget: "Brave.Brave",
+          portableUrl: null,
+        },
+        {
+          name: "7-Zip",
+          cat: "Compresión",
+          desc: "Compresor gratuito, liviano y compatible con muchos formatos.",
+          url: "https://www.7-zip.org/download.html",
+          tag: "Imprescindible",
+          initial: "7Z",
+          winget: "7zip.7zip",
+          portableUrl: "https://portableapps.com/apps/utilities/7-zip_portable",
+        },
+        {
+          name: "WinRAR",
+          cat: "Compresión",
+          desc: "Herramienta clásica para archivos RAR, ZIP y otros formatos.",
+          url: "https://www.win-rar.com/download.html",
+          tag: "Popular",
+          initial: "WR",
+          winget: "RARLab.WinRAR",
+          portableUrl: null,
+        },
+        {
+          name: "VLC Media Player",
+          cat: "Multimedia",
+          desc: "Reproductor de audio y video compatible con casi cualquier formato.",
+          url: "https://www.videolan.org/vlc/",
+          tag: "Imprescindible",
+          initial: "VL",
+          winget: "VideoLAN.VLC",
+          portableUrl: "https://portableapps.com/apps/music_video/vlc_portable",
+        },
+        {
+          name: "Adobe Acrobat Reader",
+          cat: "Documentos y PDF",
+          desc: "Lector de PDF, formularios, comentarios y firmas.",
+          url: "https://get.adobe.com/reader/",
+          tag: "Completo",
+          initial: "AR",
+          winget: "Adobe.Acrobat.Reader.64-bit",
+          portableUrl: null,
+        },
+        {
+          name: "Notepad++",
+          cat: "Edición y capturas",
+          desc: "Editor de texto rápido para archivos, código y configuraciones.",
+          url: "https://notepad-plus-plus.org/downloads/",
+          tag: "Liviano",
+          initial: "N+",
+          winget: "Notepad++.Notepad++",
+          portableUrl:
+            "https://portableapps.com/apps/development/notepadpp_portable",
+        },
+        {
+          name: "Visual Studio Code",
+          cat: "Edición y capturas",
+          desc: "Editor moderno para programación y archivos técnicos.",
+          url: "https://code.visualstudio.com/Download",
+          tag: "Desarrollo",
+          initial: "VS",
+          winget: "Microsoft.VisualStudioCode",
+          portableUrl: null,
+        },
+        {
+          name: "WhatsApp",
+          cat: "Comunicación",
+          desc: "Mensajería y llamadas desde la computadora.",
+          url: "https://www.whatsapp.com/download",
+          tag: "MensajerÃ­a",
+          initial: "WA",
+          winget: "WhatsApp.WhatsApp",
+          portableUrl: null,
+        },
+        {
+          name: "Telegram Desktop",
+          cat: "Comunicación",
+          desc: "Mensajería, canales y transferencia de archivos.",
+          url: "https://desktop.telegram.org/",
+          tag: "MensajerÃ­a",
+          initial: "TG",
+          winget: "Telegram.TelegramDesktop",
+          portableUrl: null,
+        },
+        {
+          name: "Zoom",
+          cat: "Comunicación",
+          desc: "Videollamadas y reuniones virtuales.",
+          url: "https://zoom.us/download",
+          tag: "Reuniones",
+          initial: "ZM",
+          winget: "Zoom.Zoom",
+          portableUrl: null,
+        },
+        {
+          name: "Everything",
+          cat: "Utilidades de Windows",
+          desc: "Encuentra archivos y carpetas de forma casi instantánea.",
+          url: "https://www.voidtools.com/downloads/",
+          tag: "Imprescindible",
+          initial: "EV",
+          winget: "voidtools.Everything",
+          portableUrl:
+            "https://portableapps.com/apps/utilities/everything-portable",
+        },
+        {
+          name: "Microsoft PowerToys",
+          cat: "Utilidades de Windows",
+          desc: "Colección oficial de herramientas para mejorar Windows.",
+          url: "https://learn.microsoft.com/windows/powertoys/install",
+          tag: "Recomendado",
+          initial: "PT",
+          winget: "Microsoft.PowerToys",
+          portableUrl: null,
+        },
+        {
+          name: "Microsoft PC Manager",
+          cat: "Utilidades de Windows",
+          desc: "Limpieza, estado del sistema y herramientas básicas de Microsoft.",
+          url: "https://pcmanager.microsoft.com/",
+          tag: "Mantenimiento",
+          initial: "PM",
+          winget: "Microsoft.PCManager",
+          portableUrl: null,
+        },
+        {
+          name: "TreeSize Free",
+          cat: "Utilidades de Windows",
+          desc: "Analiza qué carpetas y archivos ocupan espacio en el disco.",
+          url: "https://www.jam-software.com/treesize_free",
+          tag: "Espacio",
+          initial: "TS",
+          winget: "JAMSoftware.TreeSize.Free",
+          portableUrl: null,
+        },
+        {
+          name: "CrystalDiskInfo",
+          cat: "Discos y hardware",
+          desc: "Muestra salud, temperatura y datos SMART de discos HDD y SSD.",
+          url: "https://crystalmark.info/en/software/crystaldiskinfo/",
+          tag: "DiagnÃ³stico",
+          initial: "CI",
+          winget: "CrystalDewWorld.CrystalDiskInfo",
+          portableUrl:
+            "https://portableapps.com/apps/utilities/crystaldiskinfo_portable",
+        },
+        {
+          name: "CrystalDiskMark",
+          cat: "Discos y hardware",
+          desc: "Mide la velocidad de lectura y escritura de tus discos.",
+          url: "https://crystalmark.info/en/software/crystaldiskmark/",
+          tag: "Rendimiento",
+          initial: "CM",
+          winget: "CrystalDewWorld.CrystalDiskMark",
+          portableUrl:
+            "https://portableapps.com/apps/utilities/crystaldiskmark_portable",
+        },
+        {
+          name: "HWiNFO",
+          cat: "Discos y hardware",
+          desc: "Información detallada, sensores y temperaturas del equipo.",
+          url: "https://www.hwinfo.com/download/",
+          tag: "Completo",
+          initial: "HW",
+          winget: "REALiX.HWiNFO",
+          portableUrl:
+            "https://portableapps.com/apps/utilities/hwinfo-portable",
+        },
+        {
+          name: "CPU-Z",
+          cat: "Discos y hardware",
+          desc: "Información del procesador, memoria y placa madre.",
+          url: "https://www.cpuid.com/softwares/cpu-z.html",
+          tag: "Hardware",
+          initial: "CZ",
+          winget: "CPUID.CPU-Z",
+          portableUrl: "https://portableapps.com/apps/utilities/cpu-z-portable",
+        },
+        {
+          name: "GPU-Z",
+          cat: "Discos y hardware",
+          desc: "Información detallada de la placa de video.",
+          url: "https://www.techpowerup.com/gpuz/",
+          tag: "GrÃ¡ficos",
+          initial: "GZ",
+          winget: "TechPowerUp.GPU-Z",
+          portableUrl: null,
+        },
+        {
+          name: "Autoruns",
+          cat: "Procesos e inicio",
+          desc: "Muestra todo lo que se ejecuta al iniciar Windows.",
+          url: "https://learn.microsoft.com/sysinternals/downloads/autoruns",
+          tag: "Avanzado",
+          initial: "AU",
+          winget: "Microsoft.Sysinternals.Autoruns",
+          portableUrl:
+            "https://portableapps.com/apps/utilities/autoruns-portable",
+        },
+        {
+          name: "Process Explorer",
+          cat: "Procesos e inicio",
+          desc: "Administrador de tareas avanzado de Microsoft Sysinternals.",
+          url: "https://learn.microsoft.com/sysinternals/downloads/process-explorer",
+          tag: "Avanzado",
+          initial: "PE",
+          winget: "Microsoft.Sysinternals.ProcessExplorer",
+          portableUrl:
+            "https://portableapps.com/apps/utilities/process-explorer-portable",
+        },
+        {
+          name: "Process Monitor",
+          cat: "Procesos e inicio",
+          desc: "Registra actividad de archivos, procesos y Registro de Windows.",
+          url: "https://learn.microsoft.com/sysinternals/downloads/procmon",
+          tag: "TÃ©cnico",
+          initial: "PR",
+          winget: "Microsoft.Sysinternals.ProcessMonitor",
+          portableUrl: null,
+        },
+        {
+          name: "Revo Uninstaller Free",
+          cat: "Limpieza y desinstalación",
+          desc: "Desinstala programas y busca restos que puedan quedar.",
+          url: "https://www.revouninstaller.com/products/revo-uninstaller-free/",
+          tag: "Recomendado",
+          initial: "RV",
+          winget: "RevoUninstaller.RevoUninstaller",
+          portableUrl: null,
+        },
+        {
+          name: "Bulk Crap Uninstaller",
+          cat: "Limpieza y desinstalación",
+          desc: "Elimina varios programas y detecta instalaciones difíciles.",
+          url: "https://www.bcuninstaller.com/",
+          tag: "Avanzado",
+          initial: "BC",
+          winget: "Klocman.BulkCrapUninstaller",
+          portableUrl: null,
+        },
+        {
+          name: "Geek Uninstaller",
+          cat: "Limpieza y desinstalación",
+          desc: "Desinstalador pequeño, rápido y portable.",
+          url: "https://geekuninstaller.com/download",
+          tag: "Portable",
+          initial: "GU",
+          winget: "GeekUninstaller.GeekUninstaller",
+          portableUrl:
+            "https://portableapps.com/apps/utilities/geekuninstaller-portable",
+        },
+        {
+          name: "BleachBit",
+          cat: "Limpieza y desinstalación",
+          desc: "Limpieza de archivos temporales y cachés.",
+          url: "https://www.bleachbit.org/download/windows",
+          tag: "Gratis",
+          initial: "BB",
+          winget: "BleachBit.BleachBit",
+          portableUrl:
+            "https://portableapps.com/apps/utilities/bleachbit_portable",
+        },
+        {
+          name: "Malwarebytes Free",
+          cat: "Seguridad y análisis",
+          desc: "Análisis manual complementario contra malware.",
+          url: "https://www.malwarebytes.com/mwb-download",
+          tag: "Segunda opiniÃ³n",
+          initial: "MW",
+          winget: "Malwarebytes.Malwarebytes",
+          portableUrl: null,
+        },
+        {
+          name: "AdwCleaner",
+          cat: "Seguridad y análisis",
+          desc: "Elimina adware, barras y programas potencialmente no deseados.",
+          url: "https://www.malwarebytes.com/adwcleaner",
+          tag: "Portable",
+          initial: "AD",
+          winget: "Malwarebytes.AdwCleaner",
+          portableUrl: null,
+        },
+        {
+          name: "ESET Online Scanner",
+          cat: "Seguridad y análisis",
+          desc: "Escaneo puntual del sistema con el motor de ESET.",
+          url: "https://www.eset.com/int/home/online-scanner/",
+          tag: "EscÃ¡ner",
+          initial: "ES",
+          winget: null,
+          portableUrl: null,
+        },
+        {
+          name: "Microsoft Safety Scanner",
+          cat: "Seguridad y análisis",
+          desc: "Herramienta puntual de Microsoft para buscar malware.",
+          url: "https://learn.microsoft.com/microsoft-365/security/intelligence/safety-scanner-download",
+          tag: "Microsoft",
+          initial: "MS",
+          winget: null,
+          portableUrl: null,
+        },
+        {
+          name: "3DP Chip",
+          cat: "Drivers",
+          desc: "Detecta componentes y ayuda a encontrar sus controladores.",
+          url: "https://www.3dpchip.com/3dpchip/index_eng.html",
+          tag: "Drivers",
+          initial: "3D",
+          winget: null,
+          portableUrl: null,
+        },
+        {
+          name: "Intel Driver & Support Assistant",
+          cat: "Drivers",
+          desc: "Detecta y actualiza controladores de hardware Intel.",
+          url: "https://www.intel.com/content/www/us/en/support/detect.html",
+          tag: "Intel",
+          initial: "IN",
+          winget: null,
+          portableUrl: null,
+        },
+        {
+          name: "NVIDIA App",
+          cat: "Drivers",
+          desc: "Controladores y configuración para placas NVIDIA.",
+          url: "https://www.nvidia.com/en-us/software/nvidia-app/",
+          tag: "NVIDIA",
+          initial: "NV",
+          winget: null,
+          portableUrl: null,
+        },
+        {
+          name: "AMD Software",
+          cat: "Drivers",
+          desc: "Controladores y configuración para hardware AMD Radeon.",
+          url: "https://www.amd.com/en/support/download/drivers.html",
+          tag: "AMD",
+          initial: "AM",
+          winget: null,
+          portableUrl: null,
+        },
+        {
+          name: "Dropbox",
+          cat: "Nube y respaldo",
+          desc: "Sincronización de archivos entre dispositivos y la nube.",
+          url: "https://www.dropbox.com/install",
+          tag: "Nube",
+          initial: "DB",
+          winget: "Dropbox.Dropbox",
+          portableUrl: null,
+        },
+        {
+          name: "Google Drive",
+          cat: "Nube y respaldo",
+          desc: "Acceso y sincronización de Google Drive desde Windows.",
+          url: "https://www.google.com/drive/download/",
+          tag: "Nube",
+          initial: "GD",
+          winget: "Google.GoogleDrive",
+          portableUrl: null,
+        },
+        {
+          name: "Speedtest by Ookla",
+          cat: "Internet y soporte remoto",
+          desc: "Mide velocidad, latencia y estabilidad básica de Internet.",
+          url: "https://www.speedtest.net/",
+          tag: "Online",
+          initial: "ST",
+          winget: null,
+          portableUrl: null,
+        },
+        {
+          name: "Fast.com",
+          cat: "Internet y soporte remoto",
+          desc: "Prueba de velocidad muy simple desde el navegador.",
+          url: "https://fast.com/",
+          tag: "Sin instalar",
+          initial: "FA",
+          winget: null,
+          portableUrl: null,
+        },
+        {
+          name: "AnyDesk",
+          cat: "Internet y soporte remoto",
+          desc: "Acceso y soporte remoto rápido, liviano y fácil de usar.",
+          url: "https://anydesk.com/es/downloads/windows",
+          tag: "Soporte",
+          initial: "AD",
+          winget: "AnyDeskSoftwareGmbH.AnyDesk",
+          portableUrl: null,
+        },
+        {
+          name: "Asistencia rápida de Windows",
+          cat: "Internet y soporte remoto",
+          desc: "Herramienta de Microsoft para dar o recibir ayuda con un código.",
+          url: "https://apps.microsoft.com/detail/9wzdncrfj0dm",
+          tag: "Simple",
+          initial: "QA",
+          winget: null,
+          portableUrl: null,
+        },
+        {
+          name: "Chrome Remote Desktop",
+          cat: "Internet y soporte remoto",
+          desc: "Acceso remoto desde una página web usando una cuenta Google.",
+          url: "https://remotedesktop.google.com/",
+          tag: "Desde navegador",
+          initial: "CR",
+          winget: null,
+          portableUrl: null,
+        },
+        {
+          name: "RustDesk",
+          cat: "Internet y soporte remoto",
+          desc: "Alternativa de escritorio remoto abierta y multiplataforma.",
+          url: "https://rustdesk.com/",
+          tag: "Alternativa",
+          initial: "RD",
+          winget: "RustDesk.RustDesk",
+          portableUrl: null,
+        },
+        {
+          name: "Wintoys",
+          cat: "Utilidades de Windows",
+          desc: "Herramienta para configurar, optimizar, limpiar, reparar y ajustar Windows.",
+          url: "https://apps.microsoft.com/detail/9p8ltpgcbzxd",
+          initial: "WT",
+          winget: null,
+          portableUrl: null,
+        },
+        {
+          name: "Windows10Debloater",
+          cat: "Utilidades de Windows",
+          desc: "Script/GUI para quitar aplicaciones preinstaladas y aplicar ajustes en Windows 10.",
+          url: "https://github.com/Sycnex/Windows10Debloater",
+          initial: "WD",
+          winget: null,
+          portableUrl: null,
+        },
+        {
+          name: "Office 2016",
+          cat: "Documentos y PDF",
+          desc: "Página oficial de Microsoft para instalar o reinstalar Office 2016 con una licencia válida.",
+          url: "https://support.microsoft.com/en-us/office/lifecycle/officeinstall/download-and-install-or-reinstall-office-2021-office-2019-or-office-2016",
+          initial: "O16",
+          winget: null,
+          portableUrl: null,
+        },
+        {
+          name: "Core Temp",
+          cat: "Hardware y temperatura",
+          desc: "Monitor liviano de temperatura del procesador y de cada núcleo.",
+          url: "https://www.alcpu.com/CoreTemp/",
+          initial: "CT",
+          winget: "ALCPU.CoreTemp",
+          portableUrl: "https://www.alcpu.com/CoreTemp/",
+        },
+        {
+          name: "Open Hardware Monitor",
+          cat: "Hardware y temperatura",
+          desc: "Monitorea temperaturas, ventiladores, voltajes, carga y frecuencias del hardware.",
+          url: "https://openhardwaremonitor.org/",
+          initial: "OH",
+          winget: null,
+          portableUrl: "https://openhardwaremonitor.org/downloads/",
+        },
+        {
+          name: "Duplicate Cleaner",
+          cat: "Archivos y almacenamiento",
+          desc: "Busca archivos duplicados y ayuda a revisar cuáles conservar o eliminar.",
+          url: "https://www.duplicatecleaner.com/",
+          initial: "DC",
+          winget: null,
+          portableUrl: null,
+        },
+        {
+          name: "FastStone Photo Resizer",
+          cat: "Imágenes",
+          desc: "Redimensiona, convierte y renombra imágenes por lotes.",
+          url: "https://www.faststone.org/FSResizerDetail.htm",
+          initial: "FR",
+          winget: null,
+          portableUrl: "https://www.faststone.org/FSResizerDetail.htm",
+        },
+        {
+          name: "foobar2000",
+          cat: "Audio y video",
+          desc: "Reproductor de audio liviano y muy configurable.",
+          url: "https://www.foobar2000.org/",
+          initial: "FB",
+          winget: "PeterPawlowski.foobar2000",
+          portableUrl: null,
+        },
+        {
+          name: "Rufus",
+          cat: "Discos y booteo",
+          desc: "Crea pendrives booteables e instala imágenes ISO en USB.",
+          url: "https://rufus.ie/",
+          initial: "RF",
+          winget: "Rufus.Rufus",
+          portableUrl: "https://rufus.ie/",
+        },
+        {
+          name: "WinCDEmu",
+          cat: "Discos y booteo",
+          desc: "Monta imágenes ISO y otros formatos como unidades virtuales.",
+          url: "https://wincdemu.sysprogs.org/",
+          initial: "WC",
+          winget: "Sysprogs.WinCDEmu",
+          portableUrl: null,
+        },
+        {
+          name: "Emsisoft Emergency Kit",
+          cat: "Seguridad",
+          desc: "Escáner antimalware portable para diagnóstico y limpieza puntual.",
+          url: "https://www.emsisoft.com/en/home/emergency-kit/",
+          initial: "EK",
+          winget: null,
+          portableUrl: "https://www.emsisoft.com/en/home/emergency-kit/",
+        },
+        {
+          name: "ClipX",
+          cat: "Productividad",
+          desc: "Historial de portapapeles simple y liviano.",
+          url: "https://bluemars.org/clipx/",
+          initial: "CX",
+          winget: null,
+          portableUrl: null,
+        },
+        {
+          name: "DimScreen",
+          cat: "Pantalla y accesibilidad",
+          desc: "Reduce rápidamente el brillo aparente de la pantalla desde Windows.",
+          url: "https://dimscreen.en.softonic.com/",
+          initial: "DS",
+          winget: null,
+          portableUrl: null,
+        },
+        {
+          name: "TinyTask",
+          cat: "Automatización",
+          desc: "Graba y reproduce acciones simples de teclado y mouse.",
+          url: "https://tinytask.net/",
+          initial: "TT",
+          winget: null,
+          portableUrl: "https://tinytask.net/",
+        },
+        {
+          name: "CoolReader",
+          cat: "Documentos y lectura",
+          desc: "Lector liviano de ebooks y documentos en varios formatos.",
+          url: "https://sourceforge.net/projects/crengine/",
+          initial: "CR",
+          winget: null,
+          portableUrl: "https://sourceforge.net/projects/crengine/",
+        },
+        {
+          name: "ACDSee",
+          cat: "Imágenes",
+          desc: "Visor, organizador y gestor de fotografías.",
+          url: "https://www.acdsee.com/",
+          initial: "AC",
+          winget: null,
+          portableUrl: null,
+        },
+        {
+          name: "HFS - HTTP File Server",
+          cat: "Red y transferencia",
+          desc: "Servidor HTTP simple para compartir archivos desde una PC por red.",
+          url: "https://github.com/rejetto/hfs",
+          initial: "HF",
+          winget: null,
+          portableUrl: "https://github.com/rejetto/hfs/releases",
+        },
+        {
+          name: "3DP Net",
+          cat: "Drivers",
+          desc: "Paquete para instalar controladores de red cuando una PC quedó sin Internet.",
+          url: "https://www.3dpchip.com/3dpchip/3dp/net_down_en.php",
+          initial: "3N",
+          winget: null,
+          portableUrl: null,
+        },
+        {
+          name: "BlyxBackup",
+          cat: "Herramientas Blyx",
+          desc: "Backups y copias incrementales.",
+          url: "#",
+          initial: "BX",
+          winget: null,
+          portableUrl: null,
+        },
+        {
+          name: "BlyxDaylog",
+          cat: "Herramientas Blyx",
+          desc: "Registro diario y seguimiento.",
+          url: "#",
+          initial: "BX",
+          winget: null,
+          portableUrl: null,
+        },
+        {
+          name: "BlyxFolderRadar",
+          cat: "Herramientas Blyx",
+          desc: "Monitoreo y análisis de carpetas.",
+          url: "#",
+          initial: "BX",
+          winget: null,
+          portableUrl: null,
+        },
+        {
+          name: "BlyxInstagramDownloader",
+          cat: "Herramientas Blyx",
+          desc: "Descarga de contenido de Instagram.",
+          url: "#",
+          initial: "BX",
+          winget: null,
+          portableUrl: null,
+        },
+        {
+          name: "BlyxJPG",
+          cat: "Herramientas Blyx",
+          desc: "Herramienta de procesamiento de imágenes JPG.",
+          url: "#",
+          initial: "BX",
+          winget: null,
+          portableUrl: null,
+        },
+        {
+          name: "BlyxSentinel",
+          cat: "Herramientas Blyx",
+          desc: "Herramienta propia de monitoreo.",
+          url: "#",
+          initial: "BX",
+          winget: null,
+          portableUrl: null,
+        },
+        {
+          name: "BlyxSmartArchiver",
+          cat: "Herramientas Blyx",
+          desc: "Organización y archivado inteligente de archivos.",
+          url: "#",
+          initial: "BX",
+          winget: null,
+          portableUrl: null,
+        },
+        {
+          name: "BlyxTikTokDownloaderPortable",
+          cat: "Herramientas Blyx",
+          desc: "Descarga portable de contenido de TikTok.",
+          url: "#",
+          initial: "BX",
+          winget: null,
+          portableUrl: null,
+        },
+        {
+          name: "BlyxTikTokImagenesPortable",
+          cat: "Herramientas Blyx",
+          desc: "Descarga portable de imágenes de TikTok.",
+          url: "#",
+          initial: "BX",
+          winget: null,
+          portableUrl: null,
+        },
+        {
+          name: "BlyxVideoMini",
+          cat: "Herramientas Blyx",
+          desc: "Procesamiento y reducción de videos.",
+          url: "#",
+          initial: "BX",
+          winget: null,
+          portableUrl: null,
+        },
+        {
+          name: "BlyxVSCODownloader",
+          cat: "Herramientas Blyx",
+          desc: "Descarga/gestión relacionada con VS Code.",
+          url: "#",
+          initial: "BX",
+          winget: null,
+          portableUrl: null,
+        },
+        {
+          name: "BuscadorDuplicadas",
+          cat: "Herramientas Blyx",
+          desc: "Buscador propio de archivos duplicados.",
+          url: "#",
+          initial: "BX",
+          winget: null,
+          portableUrl: null,
+        },
+        {
+          name: "Media Optimizer",
+          cat: "Herramientas Blyx",
+          desc: "Optimización y procesamiento de archivos multimedia.",
+          url: "#",
+          initial: "BX",
+          winget: null,
+          portableUrl: null,
+        },
+        {
+          name: "Video a jpg",
+          cat: "Herramientas Blyx",
+          desc: "Extrae imágenes JPG desde videos.",
+          url: "#",
+          initial: "BX",
+          winget: null,
+          portableUrl: null,
+        },
+      ];
+      const commands = [
+        {
+          title: "Reparar archivos de Windows",
+          desc: "Busca y repara archivos protegidos del sistema.",
+          command: "sfc /scannow",
+          admin: true,
+          level: "Sistema",
+        },
+        {
+          title: "Reparar imagen de Windows",
+          desc: "Repara la imagen del sistema usada por Windows Update y SFC.",
+          command: "DISM /Online /Cleanup-Image /RestoreHealth",
+          admin: true,
+          level: "Sistema",
+        },
+        {
+          title: "Analizar componentes",
+          desc: "Informa el estado y tamaño del almacén de componentes.",
+          command: "DISM /Online /Cleanup-Image /AnalyzeComponentStore",
+          admin: true,
+          level: "Sistema",
+        },
+        {
+          title: "Limpiar componentes antiguos",
+          desc: "Limpia componentes reemplazados de Windows.",
+          command: "DISM /Online /Cleanup-Image /StartComponentCleanup",
+          admin: true,
+          level: "Sistema",
+        },
+        {
+          title: "Buscar errores en disco",
+          desc: "Analiza la unidad C sin programar una reparación completa.",
+          command: "chkdsk C: /scan",
+          admin: true,
+          level: "Discos",
+        },
+        {
+          title: "Actualizar programas",
+          desc: "Actualiza las aplicaciones compatibles con WinGet.",
+          command: "winget upgrade --all",
+          admin: false,
+          level: "WinGet",
+        },
+        {
+          title: "Ver programas instalados",
+          desc: "Lista los paquetes reconocidos por WinGet.",
+          command: "winget list",
+          admin: false,
+          level: "WinGet",
+        },
+        {
+          title: "Exportar lista WinGet",
+          desc: "Guarda una lista reproducible de aplicaciones.",
+          command:
+            'winget export -o "$env:USERPROFILE\\Desktop\\programas-winget.json" --include-versions',
+          admin: false,
+          level: "WinGet",
+        },
+        {
+          title: "Importar lista WinGet",
+          desc: "Instala apps desde un archivo exportado.",
+          command:
+            'winget import -i "$env:USERPROFILE\\Desktop\\programas-winget.json" --accept-package-agreements --accept-source-agreements',
+          admin: false,
+          level: "WinGet",
+        },
+        {
+          title: "Limpiar DNS",
+          desc: "Vacía la caché DNS.",
+          command: "ipconfig /flushdns",
+          admin: true,
+          level: "Red",
+        },
+        {
+          title: "Renovar IP",
+          desc: "Libera y solicita una nueva IP al router.",
+          command: "ipconfig /release\nipconfig /renew",
+          admin: true,
+          level: "Red",
+        },
+        {
+          title: "Restablecer Winsock",
+          desc: "Reinicia componentes de red.",
+          command: "netsh winsock reset",
+          admin: true,
+          level: "Red",
+        },
+        {
+          title: "Ver adaptadores",
+          desc: "Muestra adaptadores, estado, velocidad y MAC.",
+          command:
+            "Get-NetAdapter | Format-Table Name, Status, LinkSpeed, MacAddress",
+          admin: false,
+          level: "Red",
+        },
+        {
+          title: "Probar Internet",
+          desc: "Comprueba conectividad y latencia.",
+          command: "Test-Connection 1.1.1.1 -Count 4",
+          admin: false,
+          level: "Red",
+        },
+        {
+          title: "Probar puerto 443",
+          desc: "Comprueba si un dominio responde por HTTPS.",
+          command: "Test-NetConnection google.com -Port 443",
+          admin: false,
+          level: "Red",
+        },
+        {
+          title: "Ver programas de inicio",
+          desc: "Lista entradas configuradas para iniciar con Windows.",
+          command:
+            "Get-CimInstance Win32_StartupCommand | Select-Object Name, Command, Location",
+          admin: false,
+          level: "Inicio",
+        },
+        {
+          title: "Ver procesos CPU",
+          desc: "Muestra los procesos con más tiempo de CPU.",
+          command:
+            "Get-Process | Sort-Object CPU -Descending | Select-Object -First 15 Name, CPU, Id",
+          admin: false,
+          level: "Procesos",
+        },
+        {
+          title: "Ver procesos RAM",
+          desc: "Muestra los procesos que más memoria usan.",
+          command:
+            "Get-Process | Sort-Object WorkingSet64 -Descending | Select-Object -First 15 Name, @{Name='RAM_MB';Expression={[math]::Round($_.WorkingSet64/1MB,1)}}, Id",
+          admin: false,
+          level: "Procesos",
+        },
+        {
+          title: "Ver discos físicos",
+          desc: "Lista discos y estado de salud.",
+          command:
+            "Get-PhysicalDisk | Format-Table FriendlyName, MediaType, BusType, Size, HealthStatus",
+          admin: false,
+          level: "Hardware",
+        },
+        {
+          title: "Ver espacio disponible",
+          desc: "Muestra capacidad y espacio libre.",
+          command:
+            "Get-Volume | Where-Object DriveLetter | Format-Table DriveLetter, FileSystemLabel, FileSystem, SizeRemaining, Size",
+          admin: false,
+          level: "Hardware",
+        },
+        {
+          title: "Ver batería",
+          desc: "Muestra carga y estado de la batería.",
+          command:
+            "Get-CimInstance Win32_Battery | Select-Object Name, EstimatedChargeRemaining, BatteryStatus",
+          admin: false,
+          level: "Hardware",
+        },
+        {
+          title: "Informe de batería",
+          desc: "Genera un reporte HTML de batería en el Escritorio.",
+          command:
+            'powercfg /batteryreport /output "$env:USERPROFILE\\Desktop\\battery-report.html"',
+          admin: false,
+          level: "Informe",
+        },
+        {
+          title: "Informe de energía",
+          desc: "Analiza problemas de energía y suspensión.",
+          command:
+            'powercfg /energy /output "$env:USERPROFILE\\Desktop\\energy-report.html"',
+          admin: true,
+          level: "Informe",
+        },
+        {
+          title: "Ver drivers",
+          desc: "Lista controladores firmados y sus versiones.",
+          command:
+            "Get-CimInstance Win32_PnPSignedDriver | Select-Object DeviceName, Manufacturer, DriverVersion, DriverDate | Sort-Object DeviceName",
+          admin: false,
+          level: "Drivers",
+        },
+        {
+          title: "Dispositivos con errores",
+          desc: "Muestra dispositivos Plug and Play con problemas.",
+          command: "Get-PnpDevice | Where-Object Status -ne 'OK'",
+          admin: false,
+          level: "Drivers",
+        },
+        {
+          title: "Exportar drivers",
+          desc: "Copia controladores de terceros al Escritorio.",
+          command:
+            'Export-WindowsDriver -Online -Destination "$env:USERPROFILE\\Desktop\\DriversBackup"',
+          admin: true,
+          level: "Drivers",
+        },
+        {
+          title: "Eventos críticos",
+          desc: "Muestra errores críticos recientes del sistema.",
+          command:
+            "Get-WinEvent -FilterHashtable @{LogName='System'; Level=1,2; StartTime=(Get-Date).AddDays(-3)} | Select-Object TimeCreated, Id, ProviderName, Message",
+          admin: true,
+          level: "Diagnóstico",
+        },
+        {
+          title: "Apagados inesperados",
+          desc: "Busca reinicios y apagados no planificados.",
+          command:
+            "Get-WinEvent -FilterHashtable @{LogName='System'; Id=41,6008} | Select-Object -First 20 TimeCreated, Id, Message",
+          admin: true,
+          level: "Diagnóstico",
+        },
+        {
+          title: "Vaciar Papelera",
+          desc: "Vacía la Papelera de reciclaje.",
+          command: "Clear-RecycleBin -Force",
+          admin: false,
+          level: "Limpieza",
+        },
+        {
+          title: "Limpiar temporales",
+          desc: "Borra temporales del usuario que no estén en uso.",
+          command:
+            "Get-ChildItem $env:TEMP -Force -ErrorAction SilentlyContinue | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue",
+          admin: false,
+          level: "Limpieza",
+        },
+        {
+          title: "Abrir Windows Update",
+          desc: "Abre directamente Windows Update.",
+          command: "Start-Process 'ms-settings:windowsupdate'",
+          admin: false,
+          level: "Acceso",
+        },
+        {
+          title: "Abrir programas de inicio",
+          desc: "Abre la configuración de apps de inicio.",
+          command: "Start-Process 'ms-settings:startupapps'",
+          admin: false,
+          level: "Acceso",
+        },
+        {
+          title: "Abrir almacenamiento",
+          desc: "Abre la configuración de almacenamiento.",
+          command: "Start-Process 'ms-settings:storagesense'",
+          admin: false,
+          level: "Acceso",
+        },
+        {
+          title: "Hash SHA256",
+          desc: "Calcula el hash de un archivo.",
+          command: 'Get-FileHash "C:\\ruta\\archivo.exe" -Algorithm SHA256',
+          admin: false,
+          level: "Seguridad",
+        },
+        {
+          title: "Buscar archivos grandes",
+          desc: "Lista los 30 archivos más grandes del perfil.",
+          command:
+            "Get-ChildItem $env:USERPROFILE -File -Recurse -ErrorAction SilentlyContinue | Sort-Object Length -Descending | Select-Object -First 30 FullName, @{Name='MB';Expression={[math]::Round($_.Length/1MB,1)}}",
+          admin: false,
+          level: "Espacio",
+        },
+      ];
+      const helps = [
+        {
+          title: "Cómo desactivar manualmente el inicio rápido",
+          body: "Ve al Panel de control y selecciona «Opciones de energía».\n\nElige «Cambiar las acciones de los botones de inicio/apagado».\n\nHaz clic en «Cambiar la configuración actualmente no disponible».\n\nEn «Configuración de apagado», desmarca la casilla «Activar inicio rápido».",
+        },
+        {
+          title: "Sacar marca de agua Windows 11",
+          body: "1. Abrir CMD como administrador\n2. Copiar y pegar:\nbcdedit -set TESTSIGNING OFF\n3. Cuando salga que se completó con éxito, reiniciar computadora.",
+        },
+        {
+          title: "Chrome más rápido",
+          body: "Crear acceso directo a Chrome y agregar:\n\n--disable-extensions\n–process-per-site",
+        },
+        {
+          title: "Servicios para sacar",
+          body: "Superfetch\nWindows Search\nWindows Update\nServicio de uso compartido de red del Reproductor de Windows Media\nDirectiva de extracción de tarjetas inteligentes\nTarjeta inteligente\nUbicador de llamada a procedimiento remoto\nParental Controls\nArchivos sin conexión\nAgente de Protección de acceso a redes\nServicio del iniciador iSCSI de Microsoft\nBranchCache\nServicio Informe de errores de Windows\nServicio Cifrado de unidad BitLocker\nFax\nServicio de entrada de Tablet PC\nServicio biométrico de Windows",
+        },
+        {
+          title: "Deshabilitar restaurar sistema",
+          body: "Go to Start and open Computer.\nRight-click your SSD drive and select Properties.\nAt the bottom of the disk properties window, uncheck Allow files on this drive to have contents indexed in addition to file properties.\nClick OK to save your changes.\n\nSi hay SSD sacar la opción del disco de indexar los archivos, desde las propiedades del disco.",
+        },
+        {
+          title: "Windows tarda en abrir carpeta?",
+          body: "desactivar file indexing?\n\nhttps://www.tenforums.com/performance-maintenance/76052-search-indexing-taking-remarkably-long-time.html\nhttps://systembooster.minitool.com/boost-pc/windows-file-explorer-slow.html\n\ndisk cleanup -> borrar thumbnails\nfolder options customize, general items",
+        },
+        {
+          title: "Mejorar PC",
+          body: "windows debloater\napps en segundo plano\npropiedades C sacar indexado, solo si es SSD\nsacar prefetch, update, search (en win lite)\nsacar visuales",
+        },
+        {
+          title: "Office / Windows / otras notas",
+          body: "Office 2016 en pendrive verde y blanco\n\nHay una forma de activar Office y Windows con códigos de la página Massgrave:\nhttps://massgrave.dev/\n\nHay un Windows del grupo Phoenix creo, está en el pendrive amarillo de 2 GB.\n\nAutoruns de Windows para sacar cosas.",
+        },
+      ];
+      const grid = document.querySelector("#grid"),
+        filters = document.querySelector("#filters"),
+        search = document.querySelector("#search");
+      const categoryButton = document.querySelector("#categoryButton"),
+        modal = document.querySelector("#categoryModal");
+      const categories = ["Todos", ...new Set(apps.map((a) => a.cat))];
+      let activeCategory = "Todos";
+      const selected = new Set();
+      document.querySelector("#catCount").textContent = categories.length - 1;
 
-function renderFilters(){
- filters.innerHTML=categories.map(c=>`<button class="filter ${c===activeCategory?'active':''}" data-cat="${c}">${c}</button>`).join('');
- filters.querySelectorAll('[data-cat]').forEach(b=>b.onclick=()=>{activeCategory=b.dataset.cat;renderFilters();renderCards();closeModal();});
-}
-function renderCards(){
- const q=search.value.trim().toLocaleLowerCase('es');
- const visible=apps.filter(a=>(activeCategory==='Todos'||a.cat===activeCategory)&&(`${a.name} ${a.cat} ${a.desc}`).toLocaleLowerCase('es').includes(q));
- grid.innerHTML=visible.map(a=>`<article class="card ${selected.has(a.name)?'selected':''}">
- <div class="top"><div class="icon">${a.initial}</div><button class="select" data-select="${a.name}">${selected.has(a.name)?'✓':'+'}</button></div>
+      function renderFilters() {
+        filters.innerHTML = categories
+          .map(
+            (c) =>
+              `<button class="filter ${c === activeCategory ? "active" : ""}" data-cat="${c}">${c}</button>`,
+          )
+          .join("");
+        filters.querySelectorAll("[data-cat]").forEach(
+          (b) =>
+            (b.onclick = () => {
+              activeCategory = b.dataset.cat;
+              renderFilters();
+              renderCards();
+              closeModal();
+            }),
+        );
+      }
+      function renderCards() {
+        const q = search.value.trim().toLocaleLowerCase("es");
+        const visible = apps.filter(
+          (a) =>
+            (activeCategory === "Todos" || a.cat === activeCategory) &&
+            `${a.name} ${a.cat} ${a.desc}`.toLocaleLowerCase("es").includes(q),
+        );
+        grid.innerHTML = visible
+          .map(
+            (
+              a,
+            ) => `<article class="card ${selected.has(a.name) ? "selected" : ""}">
+ <div class="top"><div class="icon">${a.initial}</div><button class="select" data-select="${a.name}">${selected.has(a.name) ? "✓" : "+"}</button></div>
  <h2>${a.name}</h2>
- <div class="status">${a.winget?'<span class="label good">WinGet</span>':'<span class="label warn">Manual</span>'}${a.portableUrl?'<span class="label">Portable</span>':''}</div>
- <p>${a.desc}</p><div class="meta"><span class="cat">${a.cat}</span><div class="actions"><a class="download" target="_blank" rel="noopener" href="${a.url}" ${a.url==="#"?'onclick="return false" title="Herramienta local / propia"':""}>${a.url==="#"?"Local":"Oficial ↗"}</a>${a.portableUrl?`<a class="download portable" target="_blank" rel="noopener" href="${a.portableUrl}">Portable ↗</a>`:''}</div></div>
- </article>`).join('');
- grid.querySelectorAll('[data-select]').forEach(b=>b.onclick=()=>{selected.has(b.dataset.select)?selected.delete(b.dataset.select):selected.add(b.dataset.select);renderCards();updateSelection();});
- document.querySelector('#count').textContent=visible.length;
- categoryButton.textContent=activeCategory==='Todos'?'Todas las categorías':activeCategory;
-}
-function updateSelection(){document.querySelector('#selectionCount').textContent=selected.size;document.querySelector('#selectionBar').classList.toggle('visible',selected.size>0)}
-function buildWinget(){return apps.filter(a=>selected.has(a.name)&&a.winget).map(a=>`winget install --id ${a.winget} --exact --accept-package-agreements --accept-source-agreements`).join('\n')}
-function openModal(){modal.classList.add('open');document.body.style.overflow='hidden'} function closeModal(){modal.classList.remove('open');document.body.style.overflow=''}
-categoryButton.onclick=openModal; modal.querySelectorAll('[data-close]').forEach(x=>x.onclick=closeModal); document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
-search.oninput=renderCards; document.querySelector('#clear').onclick=()=>{search.value='';activeCategory='Todos';renderFilters();renderCards()};
-document.querySelector('#clearSelection').onclick=()=>{selected.clear();renderCards();updateSelection()};
-document.querySelector('#showWinget').onclick=()=>{document.querySelector('#wingetCode').textContent=buildWinget()||'# No hay programas seleccionados con WinGet.';document.querySelector('#wingetPanel').hidden=false;document.querySelector('#wingetPanel').scrollIntoView({behavior:'smooth'})};
-document.querySelector('#copyWinget').onclick=async()=>{await navigator.clipboard.writeText(document.querySelector('#wingetCode').textContent)};
-document.querySelector('#downloadBat').onclick=()=>{const c=buildWinget();const blob=new Blob([`@echo off\r\n${c.replaceAll('\n','\r\n')}\r\npause\r\n`],{type:'text/plain'});const u=URL.createObjectURL(blob);const a=document.createElement('a');a.href=u;a.download='instalar-programas.bat';a.click();URL.revokeObjectURL(u)};
+ <div class="status">${a.winget ? '<span class="label good">WinGet</span>' : '<span class="label warn">Manual</span>'}${a.portableUrl ? '<span class="label">Portable</span>' : ""}</div>
+ <p>${a.desc}</p><div class="meta"><span class="cat">${a.cat}</span><div class="actions"><a class="download" target="_blank" rel="noopener" href="${a.url}" ${a.url === "#" ? 'onclick="return false" title="Herramienta local / propia"' : ""}>${a.url === "#" ? "Local" : "Oficial ↗"}</a>${a.portableUrl ? `<a class="download portable" target="_blank" rel="noopener" href="${a.portableUrl}">Portable ↗</a>` : ""}</div></div>
+ </article>`,
+          )
+          .join("");
+        grid.querySelectorAll("[data-select]").forEach(
+          (b) =>
+            (b.onclick = () => {
+              selected.has(b.dataset.select)
+                ? selected.delete(b.dataset.select)
+                : selected.add(b.dataset.select);
+              renderCards();
+              updateSelection();
+            }),
+        );
+        document.querySelector("#count").textContent = visible.length;
+        categoryButton.textContent =
+          activeCategory === "Todos" ? "Todas las categorías" : activeCategory;
+      }
+      function updateSelection() {
+        document.querySelector("#selectionCount").textContent = selected.size;
+        document
+          .querySelector("#selectionBar")
+          .classList.toggle("visible", selected.size > 0);
+      }
+      function buildWinget() {
+        return apps
+          .filter((a) => selected.has(a.name) && a.winget)
+          .map(
+            (a) =>
+              `winget install --id ${a.winget} --exact --accept-package-agreements --accept-source-agreements`,
+          )
+          .join("\n");
+      }
+      function openModal() {
+        modal.classList.add("open");
+        document.body.style.overflow = "hidden";
+      }
+      function closeModal() {
+        modal.classList.remove("open");
+        document.body.style.overflow = "";
+      }
+      categoryButton.onclick = openModal;
+      modal
+        .querySelectorAll("[data-close]")
+        .forEach((x) => (x.onclick = closeModal));
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeModal();
+      });
+      search.oninput = renderCards;
+      document.querySelector("#clear").onclick = () => {
+        search.value = "";
+        activeCategory = "Todos";
+        renderFilters();
+        renderCards();
+      };
+      document.querySelector("#clearSelection").onclick = () => {
+        selected.clear();
+        renderCards();
+        updateSelection();
+      };
+      document.querySelector("#showWinget").onclick = () => {
+        document.querySelector("#wingetCode").textContent =
+          buildWinget() || "# No hay programas seleccionados con WinGet.";
+        document.querySelector("#wingetPanel").hidden = false;
+        document
+          .querySelector("#wingetPanel")
+          .scrollIntoView({ behavior: "smooth" });
+      };
+      document.querySelector("#copyWinget").onclick = async () => {
+        await navigator.clipboard.writeText(
+          document.querySelector("#wingetCode").textContent,
+        );
+      };
+      document.querySelector("#downloadBat").onclick = () => {
+        const c = buildWinget();
+        const blob = new Blob(
+          [`@echo off\r\n${c.replaceAll("\n", "\r\n")}\r\npause\r\n`],
+          { type: "text/plain" },
+        );
+        const u = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = u;
+        a.download = "instalar-programas.bat";
+        a.click();
+        URL.revokeObjectURL(u);
+      };
 
-function renderCommands(){
- const cg=document.querySelector('#commandsGrid');cg.innerHTML=commands.map((x,i)=>`<article class="command-card"><h3>${x.title}</h3><div class="status"><span class="label ${x.admin?'warn':'good'}">${x.admin?'Administrador':'Normal'}</span><span class="label">${x.level}</span></div><p>${x.desc}</p><pre><code>${escapeHtml(x.command)}</code></pre><button class="copy" data-copy="${i}">Copiar</button></article>`).join('');
- cg.querySelectorAll('[data-copy]').forEach(b=>b.onclick=async()=>{await navigator.clipboard.writeText(commands[+b.dataset.copy].command);b.textContent='Copiado';setTimeout(()=>b.textContent='Copiar',1000)});
-}
-function renderHelps(){document.querySelector('#helpGrid').innerHTML=helps.map(x=>`<article class="help-card"><h3>${x.title}</h3><pre>${escapeHtml(x.body)}</pre></article>`).join('')}
-function escapeHtml(s){return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
-document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.tab-panel').forEach(x=>x.classList.remove('active'));t.classList.add('active');document.querySelector('#'+t.dataset.tab+'Tab').classList.add('active')});
-document.querySelectorAll('.subtab').forEach(t=>t.onclick=()=>{document.querySelectorAll('.subtab').forEach(x=>x.classList.remove('active'));t.classList.add('active');document.querySelector('#commandsGrid').style.display=t.dataset.sub==='cmd'?'grid':'none';document.querySelector('#helpGrid').style.display=t.dataset.sub==='help'?'grid':'none'});
-renderFilters();renderCards();renderCommands();renderHelps();updateSelection();
-</script>
-</body>
+      function renderCommands() {
+        const cg = document.querySelector("#commandsGrid");
+        cg.innerHTML = commands
+          .map(
+            (x, i) =>
+              `<article class="command-card"><h3>${x.title}</h3><div class="status"><span class="label ${x.admin ? "warn" : "good"}">${x.admin ? "Administrador" : "Normal"}</span><span class="label">${x.level}</span></div><p>${x.desc}</p><pre><code>${escapeHtml(x.command)}</code></pre><button class="copy" data-copy="${i}">Copiar</button></article>`,
+          )
+          .join("");
+        cg.querySelectorAll("[data-copy]").forEach(
+          (b) =>
+            (b.onclick = async () => {
+              await navigator.clipboard.writeText(
+                commands[+b.dataset.copy].command,
+              );
+              b.textContent = "Copiado";
+              setTimeout(() => (b.textContent = "Copiar"), 1000);
+            }),
+        );
+      }
+      function renderHelps() {
+        document.querySelector("#helpGrid").innerHTML = helps
+          .map(
+            (x) =>
+              `<article class="help-card"><h3>${x.title}</h3><pre>${escapeHtml(x.body)}</pre></article>`,
+          )
+          .join("");
+      }
+      function escapeHtml(s) {
+        return s.replace(
+          /[&<>"']/g,
+          (m) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#039;",
+            })[m],
+        );
+      }
+      document.querySelectorAll(".tab").forEach(
+        (t) =>
+          (t.onclick = () => {
+            document
+              .querySelectorAll(".tab")
+              .forEach((x) => x.classList.remove("active"));
+            document
+              .querySelectorAll(".tab-panel")
+              .forEach((x) => x.classList.remove("active"));
+            t.classList.add("active");
+            document
+              .querySelector("#" + t.dataset.tab + "Tab")
+              .classList.add("active");
+          }),
+      );
+      document.querySelectorAll(".subtab").forEach(
+        (t) =>
+          (t.onclick = () => {
+            document
+              .querySelectorAll(".subtab")
+              .forEach((x) => x.classList.remove("active"));
+            t.classList.add("active");
+            document.querySelector("#commandsGrid").style.display =
+              t.dataset.sub === "cmd" ? "grid" : "none";
+            document.querySelector("#helpGrid").style.display =
+              t.dataset.sub === "help" ? "grid" : "none";
+          }),
+      );
+      renderFilters();
+      renderCards();
+      renderCommands();
+      renderHelps();
+      updateSelection();
+    </script>
+  </body>
 </html>
